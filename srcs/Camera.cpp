@@ -1,27 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   Camera.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/18 10:15:45 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/11/21 16:17:56 by lde-merc         ###   ########.fr       */
+/*   Created: 2025/11/21 10:59:05 by lde-merc          #+#    #+#             */
+/*   Updated: 2025/11/21 11:37:21 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Application.hpp"
+#include "Camera.hpp"
 
-int main(int argc, char *argv[]) {
-	cout << "Hello, Scop!" << endl;
-	if (argc != 2) {
-		std::cerr << "Usage: " << argv[0] << " <model.obj>" << std::endl;
-		return 1;
-	}
+Camera::Camera() {}
+
+Camera::~Camera() {}
+
+void Camera::moveForward() {
 	
-	Application app;
-	app.init(argv[1]);
-	app.run();
-	app.cleanup();
-	return 0;
 }
+

@@ -1,27 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   Material.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/18 10:15:45 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/11/21 16:17:56 by lde-merc         ###   ########.fr       */
+/*   Created: 2025/11/21 10:38:56 by lde-merc          #+#    #+#             */
+/*   Updated: 2025/11/21 15:35:10 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Application.hpp"
+#pragma once
 
-int main(int argc, char *argv[]) {
-	cout << "Hello, Scop!" << endl;
-	if (argc != 2) {
-		std::cerr << "Usage: " << argv[0] << " <model.obj>" << std::endl;
-		return 1;
-	}
-	
-	Application app;
-	app.init(argv[1]);
-	app.run();
-	app.cleanup();
-	return 0;
-}
+#include <glad/glad.h>
+
+class Material {
+	public :
+		Material();
+		~Material();
+
+		void setColorMode();
+		void toogleTexture();
+		void apply(GLuint) const;
+	private :
+		int _colorMode;
+		bool _useTexture;
+};

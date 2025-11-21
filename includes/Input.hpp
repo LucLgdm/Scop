@@ -1,27 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   Input.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/18 10:15:45 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/11/21 16:17:56 by lde-merc         ###   ########.fr       */
+/*   Created: 2025/11/21 10:04:27 by lde-merc          #+#    #+#             */
+/*   Updated: 2025/11/21 11:00:38 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Application.hpp"
+#pragma once
 
-int main(int argc, char *argv[]) {
-	cout << "Hello, Scop!" << endl;
-	if (argc != 2) {
-		std::cerr << "Usage: " << argv[0] << " <model.obj>" << std::endl;
-		return 1;
-	}
+#include <string>
+#include <iostream>
+#include <vector>
+#include <fstream>
+#include <sstream>
+using namespace std;
+
+
+class Input {
+	public :
+		Input();
+		~Input();
+		void update();
+		bool isKeyPressed(int);
+
+	private :
 	
-	Application app;
-	app.init(argv[1]);
-	app.run();
-	app.cleanup();
-	return 0;
-}
+};

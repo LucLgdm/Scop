@@ -6,20 +6,21 @@
 #    By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/11/18 10:18:17 by lde-merc          #+#    #+#              #
-#    Updated: 2025/11/18 10:38:33 by lde-merc         ###   ########.fr        #
+#    Updated: 2025/11/21 15:48:25 by lde-merc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 # Compiler
 CPP      = g++
-FLAGS    = -MMD -std=c++17 -I includes/
+FLAGS    = -MMD -g -std=c++17 -I includes/
 LDFLAGS  = -lglfw -ldl -lm -lGL
 
 # Sources
 vpath %.cpp srcs/
 vpath %.c srcs/
 
-SRC      = main.cpp initialisation.cpp render.cpp
+SRC      = main.cpp Application.cpp Camera.cpp Input.cpp Material.cpp Model.cpp \
+			Renderer.cpp Mat4.cpp Exception.cpp
 SRCC     = glad.c
 
 # Object directories
