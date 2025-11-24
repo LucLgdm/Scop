@@ -6,7 +6,7 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 11:33:39 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/11/21 15:42:18 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/11/24 13:04:32 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,28 @@ void Renderer::init() {
 }
 
 void Renderer::render(Model model, Camera camera, Material material) {
+	// Step 1 : CLear the screen
+	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	
+	// Step 2 : Activate the shader
+	glUseProgram(_shaderProgram);
+	
+	// Step 3 : Build the MVP Matrix
+	Mat4 modelMat = model.getModelMatrix();
+	Mat4 viewMat = camera.getViewMatrix();
+	Mat4 proj = camera.getProjectionMatrix();
+
+	Mat4 mvp = proj * viewMat * modelMat;
+
+	// Step 4 : Send the matrix to shader
+	GLint loc = glGetUniformLocation(_shaderProgram, "uMVP");
+	glUniformMatrix4fv(loc, 1, GL_FALSE, mvp.getMatrix());
+	
+	// Step 5 : Apply material
 	material.apply(_shaderProgram);
+
+	// Step 6 : Draw the model
 	model.draw();
 }
 

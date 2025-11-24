@@ -6,7 +6,7 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 11:47:21 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/11/21 11:54:12 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/11/24 13:07:03 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ class Mat4 {
 	public:
 		Mat4();
 
+		const float *getMatrix() const;
 		static Mat4 identity();
 		static Mat4 translate(float x, float y, float z);
 		static Mat4 scale(float sx, float sy, float sz);

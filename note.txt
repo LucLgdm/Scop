@@ -25,3 +25,4 @@ Dit au shader comment colorer lee modele
 Indique si on utilise une texture ou non.
 
 
+Une classe Vec3 et Vec4 pourrait etre bienvenue pour les indices et vertices

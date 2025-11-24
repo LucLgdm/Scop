@@ -6,16 +6,22 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 11:01:34 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/11/21 15:47:18 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/11/24 13:12:55 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Model.hpp"
 
-Model::Model() : _vao(0), _vbo(0), _ebo(0) {}
+Model::Model() : _vao(0), _vbo(0), _ebo(0) {
+	_modelMatrix = Mat4::identity();
+}
 
 Model::~Model() {
 	destroy();
+}
+
+Mat4 Model::getModelMatrix() const {
+	return _modelMatrix;
 }
 
 void Model::loadOBJ(const string &file) {
@@ -68,8 +74,21 @@ void Model::loadOBJ(const string &file) {
 	setupMesh();
 }
 
-void Model::rotate(float time) {
-	
+void Model::rotate(float time, int axe) {
+	float angle = time * 1.0f;
+	Mat4 r;
+	switch (axe) {
+		case 0 :
+			r = Mat4::rotateX(angle);
+			break;
+		case 1 :
+			r = Mat4::rotateY(angle);
+			break;
+		case 2 :
+			r = Mat4::rotateZ(angle);
+			break;
+	}
+	_modelMatrix = r * _modelMatrix;
 }
 
 void Model::destroy() {

@@ -6,7 +6,7 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 09:36:08 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/11/21 15:40:35 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/11/24 13:02:54 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void Application::run() {
 		if (_input.isKeyPressed(GLFW_KEY_UP))
 			_camera.moveForward();
 			
-		_model.rotate(deltaTime);
+		_model.rotate(deltaTime, 2);
 		_renderer.render(_model, _camera, _material);
 
 		glfwSwapBuffers(_window);
