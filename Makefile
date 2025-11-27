@@ -6,7 +6,7 @@
 #    By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/11/18 10:18:17 by lde-merc          #+#    #+#              #
-#    Updated: 2025/11/21 15:48:25 by lde-merc         ###   ########.fr        #
+#    Updated: 2025/11/27 17:27:23 by lde-merc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,8 +19,7 @@ LDFLAGS  = -lglfw -ldl -lm -lGL
 vpath %.cpp srcs/
 vpath %.c srcs/
 
-SRC      = main.cpp Application.cpp Camera.cpp Input.cpp Material.cpp Model.cpp \
-			Renderer.cpp Mat4.cpp Exception.cpp
+SRC      = main.cpp Object.cpp Mat4.cpp Application.cpp
 SRCC     = glad.c
 
 # Object directories
@@ -63,6 +62,9 @@ fclean: clean
 # Rebuild
 re: fclean all
 	@echo "\033[33mRebuild done!\033[0m"
+
+val: all
+	valgrind --leak-check=full --show-leak-kinds=definite --errors-for-leak-kinds=definite ./$(NAME) shaders/vertex.vs shaders/fragment.fs ressources/42.obj tex || true
 
 # Include dependencies
 -include $(DEP)

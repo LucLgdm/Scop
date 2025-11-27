@@ -1,31 +1,45 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Camera.hpp                                         :+:      :+:    :+:   */
+/*   utils.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/21 10:37:53 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/11/24 13:01:50 by lde-merc         ###   ########.fr       */
+/*   Created: 2025/11/27 09:53:55 by lde-merc          #+#    #+#             */
+/*   Updated: 2025/11/27 17:02:13 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#include "Mat4.hpp"
+struct Vect3 {
+	float x, y, z;
+};
 
-class Camera {
-	public :
-		Camera();
-		~Camera();
+struct Index {
+	int v, vt, vn;
+};
 
-		Mat4 getViewMatrix() const;
-		Mat4 getProjectionMatrix() const;
-		void moveForward();
-	private :
-		// Describe where the camera is in the scene et in which direction it looks
-		// When the camera moves, the world is moving
-		Mat4 _viewMatrix;
-		// Describe how the 3D is projected on a 2D screen
-		Mat4 _projMatrix;
+struct Vertex {
+	float x, y, z, texX, texY, normalX, normalY, normalZ;	
+};
+
+struct Ka {
+	float r, g, b;
+};
+
+struct Kd {
+	float r, g, b;
+};
+
+struct Ks {
+	float r, g, b;
+};
+
+struct Mtl {
+	Ka ka;
+	Kd kd;
+	Ks ks;
+	float Ns, Ni, d;
+	int illum;
 };

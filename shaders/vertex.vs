@@ -7,6 +7,6 @@ uniform mat4 uMVP;
 out vec3 vPos;
 
 void main() {
-    vPos = aPos;
     gl_Position = uMVP * vec4(aPos, 1.0);
+	vPos = aPos;
 }

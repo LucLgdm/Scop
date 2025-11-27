@@ -5,37 +5,42 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/21 09:35:54 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/11/21 14:04:37 by lde-merc         ###   ########.fr       */
+/*   Created: 2025/11/21 09:36:08 by lde-merc          #+#    #+#             */
+/*   Updated: 2025/11/27 17:07:32 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#include "Renderer.hpp"
-#include "Input.hpp"
-#include <exception>
+#include <iostream>
+#include <string>
+#include <vector>
+#include <fstream>
+#include <sstream>
+
+
+#include "exception.hpp"
+#include "Object.hpp"
 
 static int HEIGHT = 800;
-static int WIDTH = 600;
+static int WIDTH = 1200;
 
 class Application {
 	public :
 		Application();
 		~Application();
 		
-		void init(const string &);
+		void init(int, char **);
 		void run();
 		void cleanup();
-	
-	private :
-		GLFWwindow* _window;
-		Camera _camera;
-		Renderer _renderer;
-		Model _model;
-		Input _input;
-		Material _material;
 
+		Object *getObj() {return _obj;}
+		
+		private :
+		GLFWwindow* _window;
+		Object *_obj;
+		
 		void initGLFW();
 		void initOpenGL();
+		void inputValidate(int, char **);
 };

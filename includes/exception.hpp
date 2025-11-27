@@ -6,7 +6,7 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 11:09:53 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/11/21 15:47:41 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/11/27 12:29:48 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,24 @@ using namespace std;
 
 class fileError : public exception {
 	public:
-		fileError();
-		fileError(string);
-		virtual ~fileError() noexcept;
-		virtual const char* what() const noexcept;
+		explicit fileError(const std::string& m) : _msg(m) {}
+		const char* what() const noexcept override { return _msg.c_str(); }
+	private :
+		string _msg;
+};
+
+class glfwError : public exception {
+	public:
+		explicit glfwError(const std::string& m) : _msg(m) {}
+		const char* what() const noexcept override { return _msg.c_str(); }
+	private :
+		string _msg;
+};
+
+class openGlError : public exception {
+	public:
+		explicit openGlError(const std::string& m) : _msg(m) {}
+		const char* what() const noexcept override { return _msg.c_str(); }
 	private :
 		string _msg;
 };
