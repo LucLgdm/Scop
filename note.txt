@@ -24,4 +24,8 @@ Renderer ne stocke pas les objets eux-memes mais s'occupe de tout ce qui est pre
 	On preferera utiliser 3 vbo separes pour les positions, les normales et les UV plutot que d'utiliser
 	un seul vbo avec une struct Vertex de 9 elements pour laquelle il faudrait calculer la position de
 	depart de chaque triplet.
-6 - 
+6 - Creer les matrices view et projection pour voir et avoir de la perspective
+
+
+vertex.glsl :
+	

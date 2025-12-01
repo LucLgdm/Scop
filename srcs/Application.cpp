@@ -6,7 +6,7 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 11:44:45 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/12/01 18:17:06 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/12/01 18:23:33 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,11 @@ void Application::run() {
 
 		glBindVertexArray(_renderer.getVAO());
 		glBindTexture(GL_TEXTURE_2D, _renderer.getTexGPU(0));
-		glDrawElements(GL_TRIANGLES, _obj->getFacesIndices().size(), GL_UNSIGNED_INT, 0);
+			// Triangle
+		// glDrawElements(GL_TRIANGLES, _obj->getFacesIndices().size(), GL_UNSIGNED_INT, 0);
+			// Points
+		// glDrawArrays(GL_POINTS, 0, _obj->getPositions().size());
+		glDrawElements(GL_POINTS, _obj->getFacesIndices().size() * 3, GL_UNSIGNED_INT, 0);
 
 		glfwSwapBuffers(_window);
 		glfwPollEvents();
