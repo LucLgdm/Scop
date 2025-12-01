@@ -6,7 +6,7 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/26 18:34:11 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/11/28 10:26:46 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/12/01 14:23:02 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ class Object {
 		void saveTex(int, char **);
 
 		std::string getName() {return _name;};
+		std::vector<std::string> getTexturesPath() const {return _textures;};
+
 		void display();
 		
 	private:
@@ -50,7 +52,7 @@ class Object {
 		std::vector<Vect3> _normals;
 		std::vector<std::vector<Index>> _faces;
 
-		std::vector<char *> _textures;
+		std::vector<std::string> _textures;
 		
 		// Transformation
 		Mat4 _modelMatrix;

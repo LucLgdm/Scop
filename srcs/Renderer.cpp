@@ -6,9 +6,12 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 10:18:27 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/11/28 11:40:23 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/12/01 14:30:09 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
 
 #include "Renderer.hpp"
 
@@ -30,7 +33,7 @@ Renderer &Renderer::operator=(const Renderer &other) {
         this->_vbo = other._vbo;
         this->_ebo = other._ebo;
     }
-    return *this;
+    return *this;	
 }
 
 static std::string readFile(const char* path) {
@@ -70,3 +73,31 @@ void Renderer::init() {
 	glDeleteShader(fShader);
 }
 
+void Renderer::loadTextures(const Object& obj) {
+	std::vector<std::string> texPath = obj.getTexturesPath();
+	
+	for(int i = 0; i < texPath.size(); i++) {
+		int width, height, channels;
+		unsigned char* data = stbi_load(texPath[i].c_str(), &width, &height, &channels, 0);
+		if (!data)
+			throw fileError("Failed to load texture");
+		
+		GLuint texture;
+		glGenTextures(1, &texture);
+		glBindTexture(GL_TEXTURE_2D, texture);
+
+		GLenum format = (channels == 4) ? GL_RGBA : GL_RGB;
+		
+		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+		glGenerateMipmap(GL_TEXTURE_2D);
+		
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		
+		stbi_image_free(data);
+		_texturesGPU.push_back(texture);
+	}
+}

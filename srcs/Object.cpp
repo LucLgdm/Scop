@@ -6,7 +6,7 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/26 18:34:20 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/11/28 11:00:11 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/12/01 14:24:29 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,7 +162,7 @@ void Object::saveTex(int argc, char **argv) {
 	if (argv[2] == nullptr)
 		throw fileError("Missing a texture file !");
 	for(int i = 2; i < argc; i++)
-		_textures.push_back(argv[i]);
+		_textures.push_back(std::string(argv[i]));
 }
 
 void Object::display() {

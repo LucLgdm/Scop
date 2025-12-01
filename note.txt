@@ -13,3 +13,8 @@ C'est le responsable de tout ce qui touche a OpenGl
 	
 Renderer ne stocke pas les objets eux-memes mais s'occupe de tout ce qui est preparation GPU pour dessiner et de l'execution du draw call
 
+
+1 - Traiter l'objet : recuperer le maillage de point, les normales, les coordonnees des textures etc;
+2 - Recuperer les paths des textures depuis l'objet;
+3 - Creer les textures OpenGl depuis le renderer;
+4 - Initialiser les shaders depuis le renderer

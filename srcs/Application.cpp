@@ -6,7 +6,7 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 11:44:45 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/11/28 11:41:03 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/12/01 13:35:46 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void Application::init(int argc, char **argv) {
 	initGLFW();					// Create the window
 	initOpenGL();				// Configure OpenGl global
 	_renderer.init();			// Load the shaders
-	_obj->display();
+	// _obj->display();
 }
 
 void Application::run() {

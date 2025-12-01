@@ -6,7 +6,7 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 10:18:20 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/11/28 11:24:06 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/12/01 14:29:04 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
 
+#include "Object.hpp"
+
 class Renderer {
 	public:
 		Renderer();
@@ -29,6 +31,7 @@ class Renderer {
 		
 		Renderer &operator=(const Renderer &other);
 		void init();
+		void loadTextures(const Object&);
 
 	private:
 		GLuint _vao;
@@ -36,7 +39,6 @@ class Renderer {
 		GLuint _ebo;
 		GLuint _shaderProgram;
 
-		
-
+		std::vector<GLuint> _texturesGPU;
 
 };
