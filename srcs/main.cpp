@@ -6,7 +6,7 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 10:15:45 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/11/28 09:43:22 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/12/01 17:16:10 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int main(int argc, char *argv[]) {
 	Application app;
 	try {
 		app.init(argc, argv);
-		// app.run();
+		app.run();
 	} catch (fileError &e) {
 		std::cerr << "\033[31mFile error:\033[m" << std::endl << e.what() << std::endl;
 	} catch (glfwError &e) {
@@ -28,6 +28,6 @@ int main(int argc, char *argv[]) {
 	} catch (std::runtime_error &e) {
 		std::cerr << e.what() << std::endl;
 	}
-	// app.cleanup();
+	app.cleanup();
 	return 0;
 }

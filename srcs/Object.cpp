@@ -6,7 +6,7 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/26 18:34:20 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/12/01 14:24:29 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/12/01 15:01:20 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -227,4 +227,14 @@ void Object::display() {
 	for(int i = 0; i < n; i++) {
 		std::cout << "	" << i << ": " << _textures[i] << std::endl;
 	}
+}
+
+std::vector<unsigned int> Object::getFacesIndices() const {
+	std::vector<unsigned int> indice;
+	for(const auto& face : _faces) {
+		for(const auto& idv : face) {
+			indice.push_back(idv.v);
+		}
+	}
+	return indice;
 }

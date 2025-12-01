@@ -6,7 +6,7 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 11:47:21 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/11/27 17:12:51 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/12/01 18:13:42 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 #include <cmath>
 #include <iostream>
 using namespace std;
+
+#include "utils.hpp"
 
 class Mat4 {
 	public:
@@ -28,11 +30,14 @@ class Mat4 {
 		static Mat4 rotateX(float angle);
 		static Mat4 rotateY(float angle);
 		static Mat4 rotateZ(float angle);
+		static Mat4 perspective(float fovDeg, float aspect, float near, float far);
+		static Mat4 lookAt(const Vect3 &eye, const Vect3 &center, const Vect3 &up);
 
 		Mat4 operator*(const Mat4 &other) const;
 
 		const float* data() const { return m; }
 		float* data() { return m; }
+
 		
 		void print() const;
 

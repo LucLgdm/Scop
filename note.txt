@@ -18,3 +18,10 @@ Renderer ne stocke pas les objets eux-memes mais s'occupe de tout ce qui est pre
 2 - Recuperer les paths des textures depuis l'objet;
 3 - Creer les textures OpenGl depuis le renderer;
 4 - Initialiser les shaders depuis le renderer
+5 - Monter le Mesh : creer le VAO pour le Mesh; le VBO pour les positions, normales et UV;
+	creer un EBO pour glDrawElement; Lier les attributs au shader
+
+	On preferera utiliser 3 vbo separes pour les positions, les normales et les UV plutot que d'utiliser
+	un seul vbo avec une struct Vertex de 9 elements pour laquelle il faudrait calculer la position de
+	depart de chaque triplet.
+6 - 

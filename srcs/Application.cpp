@@ -6,17 +6,20 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 11:44:45 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/12/01 13:35:46 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/12/01 18:17:06 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Application.hpp"
 
-static float lastFrameTime = 0.0f;
-static float deltaTime = 0.0f;
-
 Application::Application() {
 	_obj = new Object;
+	_viewMatrix = Mat4::lookAt(
+		Vect3(0.0f, 0.0f, -40.0f),
+		Vect3(0.0f, 0.0f, 0.0f),
+		Vect3(0.0f, 1.0f, 0.0f)
+	);
+	_projMatrix = Mat4::identity();
 }
 
 Application::~Application() {
@@ -30,18 +33,40 @@ void Application::init(int argc, char **argv) {
 	initGLFW();					// Create the window
 	initOpenGL();				// Configure OpenGl global
 	_renderer.init();			// Load the shaders
+	_renderer.loadTextures(*_obj);
+	_renderer.setUpMesh(*_obj);
 	// _obj->display();
+	// _renderer.display();
+	
+	_projMatrix = Mat4::perspective(45.0f, (float)WIDTH/(float)HEIGHT, 0.1f, 100.0f);
 }
 
 void Application::run() {
-	while(!glfwWindowShouldClose(_window)) {
-		float currentFrameTime = (float)glfwGetTime();
-		deltaTime = currentFrameTime - lastFrameTime;
-		lastFrameTime = currentFrameTime;
-		
-		glfwPollEvents();
+	while (!glfwWindowShouldClose(_window)) {
+		glClearColor(0.2f, 0.2f, 0.17f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		glUseProgram(_renderer.getShaderProg());
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, _renderer.getTexGPU(0));
+
+		GLint texLoc = glGetUniformLocation(_renderer.getShaderProg(), "diffuseTex");
+		glUniform1i(texLoc, 0);
+
+		GLuint modelLoc = glGetUniformLocation(_renderer.getShaderProg(), "model");
+		GLuint viewLoc  = glGetUniformLocation(_renderer.getShaderProg(), "view");
+		GLuint projLoc  = glGetUniformLocation(_renderer.getShaderProg(), "projection");
+
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, _obj->getMat().data());
+		glUniformMatrix4fv(viewLoc,  1, GL_FALSE, _viewMatrix.data());
+		glUniformMatrix4fv(projLoc,  1, GL_FALSE, _projMatrix.data());
+
+		glBindVertexArray(_renderer.getVAO());
+		glBindTexture(GL_TEXTURE_2D, _renderer.getTexGPU(0));
+		glDrawElements(GL_TRIANGLES, _obj->getFacesIndices().size(), GL_UNSIGNED_INT, 0);
 
 		glfwSwapBuffers(_window);
+		glfwPollEvents();
 	}
 }
 

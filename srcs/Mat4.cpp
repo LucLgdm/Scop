@@ -6,7 +6,7 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 11:48:35 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/11/28 08:24:40 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/12/01 18:00:55 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,3 +115,45 @@ void Mat4::print() const {
 		cout << "\n";
 	}
 }
+
+Mat4 Mat4::perspective(float fovDeg, float aspect, float near, float far) {
+	float fovRad = fovDeg * (3.14159265359f / 180.0f);
+	float f = 1.0f / std::tan(fovRad / 2.0f);
+
+	Mat4 mat;
+
+	mat.m[0]  = f / aspect;
+	mat.m[5]  = f;
+	mat.m[10] = (far + near) / (near - far);
+	mat.m[11] = -1.0f;
+	mat.m[14] = (2 * far * near) / (near - far);
+
+	return mat;
+}
+
+Mat4 Mat4::lookAt(const Vect3 &eye, const Vect3 &center, const Vect3 &up) {
+	Vect3 f = normalize(center - eye);
+	Vect3 s = normalize(cross(f, up));
+	Vect3 u = cross(s, f);
+
+	Mat4 m = Mat4::identity();
+
+	m.m[0] = s.x;
+	m.m[1] = u.x;
+	m.m[2] = -f.x;
+
+	m.m[4] = s.y;
+	m.m[5] = u.y;
+	m.m[6] = -f.y;
+
+	m.m[8] = s.z;
+	m.m[9] = u.z;
+	m.m[10] = -f.z;
+
+	m.m[12] = -dot(s, eye);
+	m.m[13] = -dot(u, eye);
+	m.m[14] =  dot(f, eye);
+
+	return m;
+}
+

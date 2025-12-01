@@ -6,7 +6,7 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 09:36:08 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/11/28 10:15:05 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/12/01 18:16:54 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@
 #include "Object.hpp"
 #include "Renderer.hpp"
 
-static int HEIGHT = 800;
-static int WIDTH = 1200;
+static int HEIGHT = 1200;
+static int WIDTH = 1600;
 
 class Application {
 	public :
@@ -41,6 +41,9 @@ class Application {
 		GLFWwindow* _window;
 		Object *_obj;
 		Renderer _renderer;
+
+		Mat4 _viewMatrix;
+		Mat4 _projMatrix;
 		
 		void initGLFW();
 		void initOpenGL();
