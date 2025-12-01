@@ -6,7 +6,7 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/26 18:34:11 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/11/27 16:36:23 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/11/28 10:26:46 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,6 @@
 #include <vector>
 #include <unordered_map>
 #include <functional>
-
-#define GLFW_INCLUDE_NONE
-#include <GLFW/glfw3.h>
-#include <glad/glad.h>
 
 #include "Mat4.hpp"
 #include "utils.hpp"
@@ -42,7 +38,10 @@ class Object {
 		void setMtAttributes(std::istringstream&);
 		void setFaces(std::istringstream&);
 
+		void saveTex(int, char **);
+
 		std::string getName() {return _name;};
+		void display();
 		
 	private:
 		Mtl _mtl;
@@ -50,12 +49,9 @@ class Object {
 		std::vector<Vect3> _uvs;
 		std::vector<Vect3> _normals;
 		std::vector<std::vector<Index>> _faces;
-		
-		// OpenGL
-		GLuint _vao;
-		GLuint _vbo;
-		GLuint _ebo;
 
+		std::vector<char *> _textures;
+		
 		// Transformation
 		Mat4 _modelMatrix;
 

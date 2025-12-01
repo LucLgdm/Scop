@@ -1,15 +1,8 @@
 Classes du projet
-1  - Application - Orchestration principale
-2  - Camera - Gestion vue/projection
-3  - Input - Clavier/souris
-4  - Renderer - Appels OpenGL
-5  - Shader - Compilation/utilisation programmes GLSL
-6  - Mesh - VAO/VBO, géométrie GPU
-7  - Texture - Chargement/binding textures
-8  - Material - Propriétés (couleur, texture, transition)
-9  - ObjParser - Parse fichier .obj
-10 - Model - Stocke mailles, gère l'objet 3D
-11 - Transform - Position, rotation, échelle (optionnel si dans Camera)
+1 - Application - Orchestration principale
+2 - Object      - Contient l'objet : les points, normales, faces, textures
+3 - Renderer    - Gere ce qui touche au GPU
+9 - Mat4		- Permet de creer et manipuler des matrices 4 * 4
 
 	RENDERER :
 C'est le responsable de tout ce qui touche a OpenGl
@@ -20,9 +13,3 @@ C'est le responsable de tout ce qui touche a OpenGl
 	
 Renderer ne stocke pas les objets eux-memes mais s'occupe de tout ce qui est preparation GPU pour dessiner et de l'execution du draw call
 
-	MATERIAL :
-Dit au shader comment colorer lee modele
-Indique si on utilise une texture ou non.
-
-
-Une classe Vec3 et Vec4 pourrait etre bienvenue pour les indices et vertices

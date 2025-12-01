@@ -6,14 +6,14 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/26 18:34:20 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/11/27 17:19:17 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/11/28 11:00:11 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Object.hpp"
 
 // Constructeur
-Object::Object(): _vao(0), _vbo(0), _ebo(0) {
+Object::Object() {
 	_modelMatrix = Mat4::identity();
 	_vertices.clear();
 	_uvs.clear();
@@ -25,7 +25,8 @@ Object::Object(): _vao(0), _vbo(0), _ebo(0) {
 	_mtl.ks.r = 0.0f; _mtl.ks.g = 0.0f; _mtl.ks.b = 0.0f;
 	_mtl.d = 0.0f; _mtl.Ni = 0.0f; _mtl.Ns = 0.0f;
 	_mtl.illum = 0;
-	
+
+	_name = "Scop";
 }
 
 Object::~Object() {}
@@ -36,7 +37,13 @@ Object::Object(const Object &other) {
 
 Object &Object::operator=(const Object &other) {
     if (this != &other) {
-        // copy attributes here
+		this->_mtl = other._mtl;
+		this->_vertices = other._vertices;
+		this->_uvs = other._uvs;
+		this->_normals = other._normals;
+		this->_faces = other._faces;
+		this->_modelMatrix = other._modelMatrix;
+		this->_name = other._name;		
     }
     return *this;
 }
@@ -45,6 +52,7 @@ void Object::load(char *filePath) {
 	std::ifstream file(filePath);
 	std::string line;
 	std::string prefix;
+	
 
 	std::unordered_map<std::string, std::function<void(istringstream&)>> parser = {
 		{"o", [this, &prefix](std::istringstream& iss) {setNameAndCoord(iss, prefix);}},
@@ -57,6 +65,7 @@ void Object::load(char *filePath) {
 
 	while(std::getline(file, line)) {
 		std::istringstream iss(line);
+		prefix = "";
 		iss >> prefix;
 		std::unordered_map<std::string, std::function<void(istringstream&)>>::iterator it;
 		it = parser.find(prefix);
@@ -64,6 +73,8 @@ void Object::load(char *filePath) {
 			it->second(iss);
 	}
 	file.close();
+	if (_vertices.empty() || _faces.empty())
+		throw fileError("There isn't any vertices or faces");
 }
 
 void Object::setNameAndCoord(std::istringstream& iss, std::string prefix) {
@@ -78,7 +89,7 @@ void Object::setNameAndCoord(std::istringstream& iss, std::string prefix) {
 		Vect3 uv;
 		uv.z = 0.0f;
 		if (!(iss >> uv.x >> uv.y))
-			throw fileError("Wrong  lien for tex coord");
+			throw fileError("Wrong line for tex coord");
 		iss >> uv.z;
 		_uvs.push_back(uv);
 	}
@@ -91,7 +102,7 @@ void Object::setMtAttributes(std::istringstream& iss) {
 	std::ifstream file(fileName);
 	if (file.is_open()) {
 		while(std::getline(file, line)) {
-			std::istringstream stream;
+			std::istringstream stream(line);
 			stream >> line;
 			if (line == "Ns") {
 				stream >> _mtl.Ns;
@@ -145,4 +156,75 @@ void Object::setVertexCoord(std::istringstream& iss) {
 	Vect3 vertex;
 	iss >> vertex.x >> vertex.y >> vertex.z;
 	_vertices.push_back(vertex);
+}
+
+void Object::saveTex(int argc, char **argv) {
+	if (argv[2] == nullptr)
+		throw fileError("Missing a texture file !");
+	for(int i = 2; i < argc; i++)
+		_textures.push_back(argv[i]);
+}
+
+void Object::display() {
+	std::cout << "Name: " << _name << std::endl;
+	std::cout << "Coordinates:" << std::endl;
+	int n = _vertices.size();
+	for(int i = 0; i < n; i++) {
+		std::cout << "Vertice [" << i << "] : (x, y, z) = "
+				  << "(" << _vertices[i].x << ", "
+				  << _vertices[i].y << ", "
+				  << _vertices[i].z << ")" << std::endl;
+	}
+
+	n = _uvs.size();
+	for(int i = 0; i < n; i++) {
+		std::cout << "uv [" << i << "] : (u, v, w) = "
+				  << "(" << _uvs[i].x << ", "
+				  << _uvs[i].y << ", "
+				  << _uvs[i].z << ")" << std::endl;
+	}
+
+	n = _normals.size();
+	for(int i = 0; i < n; i++) {
+		std::cout << "Normal [" << i << "] : (x, y, z) = "
+				  << "(" << _normals[i].x << ", "
+				  << _normals[i].y << ", "
+				  << _normals[i].z << ")" << std::endl;
+	}
+
+	n = _faces.size();
+	for(int i = 0; i < n; i++) {
+		int n2 = _faces[i].size();
+		std::cout << "face [" << i << "] : " << std::endl;
+		for(int j = 0; j < n2; j++) {
+			std::cout << "	index [" << j << "] : (v, vt, vn) = "
+					  << "(" << _faces[i][j].v << ", "
+					  << _faces[i][j].vt << ", "
+					  << _faces[i][j].vn << ")" << std::endl;
+		}
+	}
+
+	std::cout << std::endl << "Material:" << std::endl;
+	std::cout << "ka: (r, g, b) =  " 
+			<< "(" << _mtl.ka.r << ", "
+			<< _mtl.ka.g << ", "
+			<< _mtl.ka.b << ")" << std::endl;
+	std::cout << "kd: (r, g, b) =  " 
+			<< "(" << _mtl.kd.r << ", "
+			<< _mtl.kd.g << ", "
+			<< _mtl.kd.b << ")" << std::endl;
+	std::cout << "ks: (r, g, b) =  " 
+			<< "(" << _mtl.ks.r << ", "
+			<< _mtl.ks.g << ", "
+			<< _mtl.ks.b << ")" << std::endl;
+	std::cout << "Ns, Ni, d, illum: "
+			<< _mtl.Ns << ", "
+			<< _mtl.Ni << ", "
+			<< _mtl.d << ", "
+			<< _mtl.illum << std::endl;
+	std::cout << "Textures:" << std::endl;
+	n = _textures.size();
+	for(int i = 0; i < n; i++) {
+		std::cout << "	" << i << ": " << _textures[i] << std::endl;
+	}
 }

@@ -6,7 +6,7 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 11:44:45 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/11/27 17:10:14 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/11/28 11:41:03 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,24 +24,13 @@ Application::~Application() {
 }
 
 void Application::init(int argc, char **argv) {
-	try {
-		inputValidate(argc, argv);
-		_obj->load(argv[3]);
-		initGLFW();					// Create the window
-		initOpenGL();				// Configure OpenGl global
-	} catch (fileError &e) {
-		std::cerr << "\033[31mFile error:\033[m" << std::endl << e.what() << std::endl;
-		exit(1);
-	} catch (glfwError &e) {
-		std::cerr << "\033[31mGLFW error:\033[m" << std::endl << e.what() << std::endl;
-		exit(1);
-	} catch (openGlError &e) {
-		std::cerr << "\033[31mOpenGl error:\033[m" << std::endl << e.what() << std::endl;
-		exit(1);
-	} catch (std::runtime_error &e) {
-		std::cerr << e.what() << std::endl;
-		exit(1);
-	}
+	inputValidate(argc, argv);
+	_obj->load(argv[1]);		// Load the mesh
+	_obj->saveTex(argc, argv);	// Load the textures
+	initGLFW();					// Create the window
+	initOpenGL();				// Configure OpenGl global
+	_renderer.init();			// Load the shaders
+	_obj->display();
 }
 
 void Application::run() {
@@ -57,19 +46,18 @@ void Application::run() {
 }
 
 void Application::cleanup() {
-
 	glfwTerminate();
 }
 
 void Application::inputValidate(int argc, char **argv) {
-	if (argc != 5) {
+	if (argc < 3) {
 		std::stringstream ss;
 		ss << "Not enough arguments,\n";
 		ss << "The program needs the following:\n";
-		ss << "A vertex shader, fragment shader, an object file, a texture.";
+		ss << "An object file, textures.";
 		throw std::runtime_error(ss.str());
 	}
-	std::string fileName = argv[3];
+	std::string fileName = argv[1];
 	if (fileName.length() >= 4 && fileName.substr(fileName.length() - 4) != ".obj")
 		throw fileError("Invalid object file, it doesn't have .obj extension.");
 		
@@ -89,15 +77,11 @@ void Application::initGLFW() {
 	if (!glfwInit())
 		throw glfwError("GLFW initialization failed");
 		
-	std::string namewin = getObj()->getName();
-	if (namewin.empty())
-		namewin = "Scop";
-		
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	
-	_window = glfwCreateWindow(WIDTH, HEIGHT, namewin.c_str(), nullptr, nullptr);
+	_window = glfwCreateWindow(WIDTH, HEIGHT, getObj()->getName().c_str(), nullptr, nullptr);
 	if (!_window)
 		throw glfwError("Window creation failed");
 	

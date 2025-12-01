@@ -1,48 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Application.hpp                                    :+:      :+:    :+:   */
+/*   Renderer.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/21 09:36:08 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/11/28 10:15:05 by lde-merc         ###   ########.fr       */
+/*   Created: 2025/11/28 10:18:20 by lde-merc          #+#    #+#             */
+/*   Updated: 2025/11/28 11:24:06 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
 #include <iostream>
-#include <string>
-#include <vector>
 #include <fstream>
 #include <sstream>
+#include <string>
 
+#define GLFW_INCLUDE_NONE
+#include <GLFW/glfw3.h>
+#include <glad/glad.h>
 
-#include "exception.hpp"
-#include "Object.hpp"
-#include "Renderer.hpp"
-
-static int HEIGHT = 800;
-static int WIDTH = 1200;
-
-class Application {
-	public :
-		Application();
-		~Application();
+class Renderer {
+	public:
+		Renderer();
+		~Renderer();
+		Renderer(const Renderer &other);
 		
-		void init(int, char **);
-		void run();
-		void cleanup();
+		Renderer &operator=(const Renderer &other);
+		void init();
 
-		Object *getObj() {return _obj;}
+	private:
+		GLuint _vao;
+		GLuint _vbo;
+		GLuint _ebo;
+		GLuint _shaderProgram;
+
 		
-	private :
-		GLFWwindow* _window;
-		Object *_obj;
-		Renderer _renderer;
-		
-		void initGLFW();
-		void initOpenGL();
-		void inputValidate(int, char **);
+
+
 };

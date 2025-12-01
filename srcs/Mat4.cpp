@@ -6,7 +6,7 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 11:48:35 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/11/27 17:13:44 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/11/28 08:24:40 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ Mat4 Mat4::null() {
 	for (int i = 0; i < 16; i++) {
 		mat.m[i] = 0.0f;
 	}
+	return mat;
 }
 Mat4 Mat4::identity() {
 	Mat4 mat;
