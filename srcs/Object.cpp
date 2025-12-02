@@ -86,11 +86,9 @@ void Object::setNameAndCoord(std::istringstream& iss, std::string prefix) {
 			throw fileError("Wrong line for normals");
 		_normals.push_back({nX, nY, nZ});
 	} else if (prefix == "vt") {
-		Vect3 uv;
-		uv.z = 0.0f;
+		Vect2 uv;
 		if (!(iss >> uv.x >> uv.y))
 			throw fileError("Wrong line for tex coord");
-		iss >> uv.z;
 		_uvs.push_back(uv);
 	}
 }
@@ -98,7 +96,7 @@ void Object::setNameAndCoord(std::istringstream& iss, std::string prefix) {
 void Object::setMtAttributes(std::istringstream& iss) {
 	std::string fileName, line;
 	iss >> fileName;
-	fileName = "ressources/" + fileName;
+	fileName = "resources/" + fileName;
 	std::ifstream file(fileName);
 	if (file.is_open()) {
 		while(std::getline(file, line)) {
@@ -135,17 +133,17 @@ void Object::setFaces(std::istringstream& iss) {
 		ind.v = 0, ind.vt = 0, ind.vn = 0;
 		size_t pos1 = aliquid.find('/');
 		if (pos1 == std::string::npos) // v only
-			ind.v = std::stoi(aliquid);
+			ind.v = std::stoi(aliquid) - 1;
 		else {
-			ind.v = std::stoi(aliquid.substr(0, pos1));
+			ind.v = std::stoi(aliquid.substr(0, pos1)) - 1;
 			size_t pos2 = aliquid.find('/', pos1 + 1);
 			if (pos2 == std::string::npos) // v/vt
-				ind.vt = std::stoi(aliquid.substr(pos1 + 1));
+				ind.vt = std::stoi(aliquid.substr(pos1 + 1)) - 1;
 			else { // v/vt/n or v//n
 				if (pos2 > pos1 + 1)
-					ind.vt = std::stoi(aliquid.substr(pos1 + 1, pos2 - pos1 - 1));
+					ind.vt = std::stoi(aliquid.substr(pos1 + 1, pos2 - pos1 - 1)) - 1;
 				if (pos2 + 1 < aliquid.size())
-					ind.vn = std::stoi(aliquid.substr(pos2 + 1));		
+					ind.vn = std::stoi(aliquid.substr(pos2 + 1)) - 1;
 			}
 		}
 		_faces.back().push_back(ind);
@@ -178,10 +176,9 @@ void Object::display() {
 
 	n = _uvs.size();
 	for(int i = 0; i < n; i++) {
-		std::cout << "uv [" << i << "] : (u, v, w) = "
+		std::cout << "uv [" << i << "] : (u, v) = "
 				  << "(" << _uvs[i].x << ", "
-				  << _uvs[i].y << ", "
-				  << _uvs[i].z << ")" << std::endl;
+				  << _uvs[i].y << ")" << std::endl;
 	}
 
 	n = _normals.size();
@@ -237,4 +234,38 @@ std::vector<unsigned int> Object::getFacesIndices() const {
 		}
 	}
 	return indice;
+}
+
+void Object::buildTriangle() {
+	_verticeBuild.clear();
+	_indiceBuild.clear();
+	// for(auto &f : _faces) {
+	// 	for(int i = 0; i < 3; i++) {
+	// 		Vertex v;
+	// 		v.pos = _vertices[f[i].v];
+	// 		v.normal = _normals[f[i].vn];
+	// 		if (f[i].vt > 0)
+	// 			v.uv = _uvs[f[i].vt];
+	// 		else
+	// 			v.uv = {0.0f, 0.0f};
+	// 		_verticeBuild.push_back(v);
+	// 	}
+	// }
+
+	for(auto &f : _faces) {
+		for(int i = 0; i < 3; i++) {
+			auto key = std::make_tuple(f[i].v, f[i].vt, f[i].vn);
+
+			if(_indexMap.count(key) == 0) {
+				Vertex v;
+				v.pos = _vertices[f[i].v];
+				v.normal = _normals[f[i].vn];
+				v.uv = f[i].vt > 0 ? _uvs[f[i].vt] : Vect2(0.0f, 0.0f);
+				_verticeBuild.push_back(v);
+				_indexMap[key] = _verticeBuild.size() - 1;
+			}
+
+			_indiceBuild.push_back(_indexMap[key]);
+		}
+	}
 }

@@ -29,3 +29,23 @@ Renderer ne stocke pas les objets eux-memes mais s'occupe de tout ce qui est pre
 
 vertex.glsl :
 	
+
+
+v   x y z
+vt  u v
+vn  x y z
+f v1/vt1/vn1 v2/vt2/vn2 v3/vt3/vn3
+
+struct Vertex {
+    Vect3 position;
+    Vect3 normal;
+    Vect2 uv;
+};
+
+Vertex A = { pos[v1], norm[vn1], uv[vt1] };
+Vertex B = { pos[v2], norm[vn2], uv[vt2] };
+Vertex C = { pos[v3], norm[vn3], uv[vt3] };
+
+push_back(A);
+push_back(B);
+push_back(C);

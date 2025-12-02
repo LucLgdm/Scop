@@ -47,9 +47,9 @@ class Renderer {
 		GLuint _vboPositions;
 		GLuint _vboNormals;
 		GLuint _vboUVs;
+		GLuint _vbo;
 		GLuint _ebo;
 		GLuint _shaderProgram;
 
 		std::vector<GLuint> _texturesGPU;
-
 };

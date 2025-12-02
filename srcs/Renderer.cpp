@@ -110,32 +110,50 @@ void Renderer::setUpMesh(const Object& obj) {
 	glGenVertexArrays(1, &_vao);
 	glBindVertexArray(_vao);
 
-	// Points
-	glGenBuffers(1, &_vboPositions);
-	glBindBuffer(GL_ARRAY_BUFFER, _vboPositions);
-	glBufferData(GL_ARRAY_BUFFER, obj.getPositions().size() * sizeof(Vect3),
-				obj.getPositions().data(), GL_STATIC_DRAW);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
-	glEnableVertexAttribArray(0);
+	// // Points
+	// glGenBuffers(1, &_vboPositions);
+	// glBindBuffer(GL_ARRAY_BUFFER, _vboPositions);
+	// glBufferData(GL_ARRAY_BUFFER, obj.getPositions().size() * sizeof(Vect3),
+	// 			obj.getPositions().data(), GL_STATIC_DRAW);
+	// glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	// glEnableVertexAttribArray(0);
 
-	// Normals
-	glGenBuffers(1, &_vboNormals);
-	glBindBuffer(GL_ARRAY_BUFFER, _vboNormals);
-	glBufferData(GL_ARRAY_BUFFER, obj.getNormals().size() * sizeof(Vect3),
-				obj.getNormals().data(), GL_STATIC_DRAW);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	// // Normals
+	// glGenBuffers(1, &_vboNormals);
+	// glBindBuffer(GL_ARRAY_BUFFER, _vboNormals);
+	// glBufferData(GL_ARRAY_BUFFER, obj.getNormals().size() * sizeof(Vect3),
+	// 			obj.getNormals().data(), GL_STATIC_DRAW);
+	// glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	// glEnableVertexAttribArray(1);
+
+	// // UVs
+	// glGenBuffers(1, &_vboUVs);
+	// glBindBuffer(GL_ARRAY_BUFFER, _vboUVs);
+	// glBufferData(GL_ARRAY_BUFFER, obj.getUVs().size() * sizeof(Vect2),
+	// 			obj.getUVs().data(), GL_STATIC_DRAW);
+	// glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	// glEnableVertexAttribArray(2);
+
+	// VBO unique
+	glGenBuffers(1, &_vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, _vbo);
+	glBufferData(GL_ARRAY_BUFFER, obj.getVertex().size() * sizeof(Vertex),
+				obj.getVertex().data(), GL_STATIC_DRAW);
+
+		// Positions
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, pos));
+	glEnableVertexAttribArray(0);
+	
+		// Normal
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, normal));
 	glEnableVertexAttribArray(1);
 
-	// UVs
-	glGenBuffers(1, &_vboUVs);
-	glBindBuffer(GL_ARRAY_BUFFER, _vboUVs);
-	glBufferData(GL_ARRAY_BUFFER, obj.getUVs().size() * sizeof(Vect3),
-				obj.getUVs().data(), GL_STATIC_DRAW);
-	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+		// Texture
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, uv));
 	glEnableVertexAttribArray(2);
 
 	// EBO
-	std::vector<unsigned int> indice = obj.getFacesIndices();
+	std::vector<unsigned int> indice = obj.getIndiceBuild();
 	
 	glGenBuffers(1, &_ebo);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _ebo);

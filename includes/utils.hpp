@@ -48,10 +48,22 @@ static Vect3 normalize(const Vect3& v) {
     return Vect3(v.x/len, v.y/len, v.z/len);
 }
 
+struct Vect2 {
+    float x, y;
+    Vect2() : x(0), y(0) {}
+    Vect2(float xx, float yy) : x(xx), y(yy) {};
+};
 
 struct Index {
 	int v, vt, vn;
 };
+
+struct Vertex {
+    Vect3 pos;
+    Vect3 normal;
+    Vect2 uv;
+};
+
 
 struct Ka {
 	float r, g, b;

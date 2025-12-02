@@ -1,11 +1,11 @@
 #version 330 core
 
-in vec3 vPos;
-
-uniform int uColorMode;   // 0,1,2…
-uniform int uUseTexture;  // ignore pour l’instant
 out vec4 FragColor;
+in vec2 TexCoord;
 
-void main() {
-	FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+uniform sampler2D uTexture;
+
+void main()
+{
+    FragColor = texture(uTexture, TexCoord);
 }

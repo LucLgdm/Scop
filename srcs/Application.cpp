@@ -15,9 +15,9 @@
 Application::Application() {
 	_obj = new Object;
 	_viewMatrix = Mat4::lookAt(
-		Vect3(0.0f, 0.0f, -40.0f),
-		Vect3(0.0f, 0.0f, 0.0f),
-		Vect3(0.0f, 1.0f, 0.0f)
+		Vect3(0.0f, 40.0f, -10.0f),
+		Vect3(0.0f, 0.0f, 15.0f),
+		Vect3(0.0f, 0.0f, 1.0f)
 	);
 	_projMatrix = Mat4::identity();
 }
@@ -30,11 +30,13 @@ void Application::init(int argc, char **argv) {
 	inputValidate(argc, argv);
 	_obj->load(argv[1]);		// Load the mesh
 	_obj->saveTex(argc, argv);	// Load the textures
+	_obj->buildTriangle();
 	initGLFW();					// Create the window
 	initOpenGL();				// Configure OpenGl global
 	_renderer.init();			// Load the shaders
 	_renderer.loadTextures(*_obj);
 	_renderer.setUpMesh(*_obj);
+	
 	// _obj->display();
 	// _renderer.display();
 	
@@ -43,6 +45,8 @@ void Application::init(int argc, char **argv) {
 
 void Application::run() {
 	while (!glfwWindowShouldClose(_window)) {
+		float time = glfwGetTime() / 2;
+
 		glClearColor(0.2f, 0.2f, 0.17f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -50,9 +54,12 @@ void Application::run() {
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, _renderer.getTexGPU(0));
 
-		GLint texLoc = glGetUniformLocation(_renderer.getShaderProg(), "diffuseTex");
+		GLint texLoc = glGetUniformLocation(_renderer.getShaderProg(), "tex0");
 		glUniform1i(texLoc, 0);
 
+		_viewMatrix = Mat4::lookAt(Vect3(45 * std::cos(time), 45 * std::sin(time), 10.0f),
+								Vect3(0.0f, 0.0f, 17.0f),
+								Vect3(0.0f, 0.0f, 1.0f));
 		GLuint modelLoc = glGetUniformLocation(_renderer.getShaderProg(), "model");
 		GLuint viewLoc  = glGetUniformLocation(_renderer.getShaderProg(), "view");
 		GLuint projLoc  = glGetUniformLocation(_renderer.getShaderProg(), "projection");
@@ -64,10 +71,10 @@ void Application::run() {
 		glBindVertexArray(_renderer.getVAO());
 		glBindTexture(GL_TEXTURE_2D, _renderer.getTexGPU(0));
 			// Triangle
-		// glDrawElements(GL_TRIANGLES, _obj->getFacesIndices().size(), GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, _obj->getIndiceBuild().size(), GL_UNSIGNED_INT, 0);
+		// glDrawArrays(GL_TRIANGLES, 0, _obj->getVertex().size());
 			// Points
-		// glDrawArrays(GL_POINTS, 0, _obj->getPositions().size());
-		glDrawElements(GL_POINTS, _obj->getFacesIndices().size() * 3, GL_UNSIGNED_INT, 0);
+		// glDrawElements(GL_POINTS, _obj->getFacesIndices().size() * 3, GL_UNSIGNED_INT, 0);
 
 		glfwSwapBuffers(_window);
 		glfwPollEvents();
