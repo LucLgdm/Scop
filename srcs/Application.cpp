@@ -6,7 +6,7 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 11:44:45 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/12/01 18:23:33 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/12/03 11:28:41 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ Application::Application() {
 	_obj = new Object;
 	_viewMatrix = Mat4::lookAt(
 		Vect3(0.0f, 40.0f, -10.0f),
-		Vect3(0.0f, 0.0f, 15.0f),
+		Vect3(0.0f, 0.0f, 0.0f),
 		Vect3(0.0f, 0.0f, 1.0f)
 	);
 	_projMatrix = Mat4::identity();
@@ -58,7 +58,7 @@ void Application::run() {
 		glUniform1i(texLoc, 0);
 
 		_viewMatrix = Mat4::lookAt(Vect3(45 * std::cos(time), 45 * std::sin(time), 10.0f),
-								Vect3(0.0f, 0.0f, 17.0f),
+								Vect3(0.0f, 0.0f, 12.0f),
 								Vect3(0.0f, 0.0f, 1.0f));
 		GLuint modelLoc = glGetUniformLocation(_renderer.getShaderProg(), "model");
 		GLuint viewLoc  = glGetUniformLocation(_renderer.getShaderProg(), "view");
@@ -70,11 +70,15 @@ void Application::run() {
 
 		glBindVertexArray(_renderer.getVAO());
 		glBindTexture(GL_TEXTURE_2D, _renderer.getTexGPU(0));
+
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		// glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
 			// Triangle
 		glDrawElements(GL_TRIANGLES, _obj->getIndiceBuild().size(), GL_UNSIGNED_INT, 0);
 		// glDrawArrays(GL_TRIANGLES, 0, _obj->getVertex().size());
 			// Points
-		// glDrawElements(GL_POINTS, _obj->getFacesIndices().size() * 3, GL_UNSIGNED_INT, 0);
+		// glDrawElements(GL_POINTS, _obj->getIndiceBuild().size() * 3, GL_UNSIGNED_INT, 0);
 
 		glfwSwapBuffers(_window);
 		glfwPollEvents();

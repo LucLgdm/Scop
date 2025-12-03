@@ -16,36 +16,17 @@ Renderer ne stocke pas les objets eux-memes mais s'occupe de tout ce qui est pre
 
 1 - Traiter l'objet : recuperer le maillage de point, les normales, les coordonnees des textures etc;
 2 - Recuperer les paths des textures depuis l'objet;
-3 - Creer les textures OpenGl depuis le renderer;
-4 - Initialiser les shaders depuis le renderer
-5 - Monter le Mesh : creer le VAO pour le Mesh; le VBO pour les positions, normales et UV;
+3 - Recreer la triangulation si necessaire, si une face a plus de 3 vertices
+4 - Creer les textures OpenGl depuis le renderer;
+5 - Initialiser les shaders depuis le renderer
+6 - Monter le Mesh : creer le VAO pour le Mesh; le VBO pour les positions, normales et UV;
 	creer un EBO pour glDrawElement; Lier les attributs au shader
 
 	On preferera utiliser 3 vbo separes pour les positions, les normales et les UV plutot que d'utiliser
 	un seul vbo avec une struct Vertex de 9 elements pour laquelle il faudrait calculer la position de
 	depart de chaque triplet.
-6 - Creer les matrices view et projection pour voir et avoir de la perspective
+7 - Creer les matrices view et projection pour voir et avoir de la perspective
 
 
 vertex.glsl :
 	
-
-
-v   x y z
-vt  u v
-vn  x y z
-f v1/vt1/vn1 v2/vt2/vn2 v3/vt3/vn3
-
-struct Vertex {
-    Vect3 position;
-    Vect3 normal;
-    Vect2 uv;
-};
-
-Vertex A = { pos[v1], norm[vn1], uv[vt1] };
-Vertex B = { pos[v2], norm[vn2], uv[vt2] };
-Vertex C = { pos[v3], norm[vn3], uv[vt3] };
-
-push_back(A);
-push_back(B);
-push_back(C);

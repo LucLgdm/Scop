@@ -6,7 +6,7 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/26 18:34:20 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/12/01 15:01:20 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/12/03 11:18:49 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -239,33 +239,35 @@ std::vector<unsigned int> Object::getFacesIndices() const {
 void Object::buildTriangle() {
 	_verticeBuild.clear();
 	_indiceBuild.clear();
-	// for(auto &f : _faces) {
-	// 	for(int i = 0; i < 3; i++) {
-	// 		Vertex v;
-	// 		v.pos = _vertices[f[i].v];
-	// 		v.normal = _normals[f[i].vn];
-	// 		if (f[i].vt > 0)
-	// 			v.uv = _uvs[f[i].vt];
-	// 		else
-	// 			v.uv = {0.0f, 0.0f};
-	// 		_verticeBuild.push_back(v);
-	// 	}
-	// }
+	_indexMap.clear();
 
 	for(auto &f : _faces) {
-		for(int i = 0; i < 3; i++) {
-			auto key = std::make_tuple(f[i].v, f[i].vt, f[i].vn);
+		int count = f.size();
+		for(int i = 1; i < count - 1 ; ++i) {
+			std::array<int, 3> tri = {0, i, i + 1};
+			
+			for(int idx : tri) {
+				auto key = std::make_tuple(f[idx].v, f[idx].vt, f[idx].vn);
+				
+				if(_indexMap.count(key) == 0) {
+					Vertex v;
+					v.pos = _vertices[f[idx].v];
+					if(f[idx].vn >= 0 && f[idx].vn < static_cast<int>(_normals.size()))
+						v.normal = _normals[f[idx].vn];
+					else
+						v.normal = Vect3(0.0f, 0.0f, 1.0f);
+					
+					if (f[idx].vt >= 0 && f[idx].vt < static_cast<int>(_uvs.size()))
+						v.uv = _uvs[f[idx].vt];
+					else
+						v.uv = Vect2(0.0f, 0.0f);
+						
+					_verticeBuild.push_back(v);
+					_indexMap[key] = _verticeBuild.size() - 1;
+				}
 
-			if(_indexMap.count(key) == 0) {
-				Vertex v;
-				v.pos = _vertices[f[i].v];
-				v.normal = _normals[f[i].vn];
-				v.uv = f[i].vt > 0 ? _uvs[f[i].vt] : Vect2(0.0f, 0.0f);
-				_verticeBuild.push_back(v);
-				_indexMap[key] = _verticeBuild.size() - 1;
+				_indiceBuild.push_back(_indexMap[key]);
 			}
-
-			_indiceBuild.push_back(_indexMap[key]);
 		}
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/26 18:34:11 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/12/01 17:33:38 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/12/03 10:49:44 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include <unordered_map>
 #include <functional>
 #include <map>
+#include <array>
 
 #include "Mat4.hpp"
 #include "utils.hpp"
