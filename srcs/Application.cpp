@@ -6,7 +6,7 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 11:44:45 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/12/03 11:50:22 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/12/03 15:19:04 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,12 @@ void Application::init(int argc, char **argv) {
 	inputValidate(argc, argv);
 	_obj->load(argv[1]);		// Load the mesh
 	_obj->saveTex(argc, argv);	// Load the textures
-	_obj->buildTriangle();
+	_obj->buildVertex();
 	initGLFW();					// Create the window
 	initOpenGL();				// Configure OpenGl global
 	_renderer.init();			// Load the shaders
 	_renderer.loadTextures(*_obj);
-	_renderer.setUpMesh(*_obj);
-	
+	_renderer.setUpMesh(*_obj);	
 	// _obj->display();
 	// _renderer.display();
 	
@@ -73,9 +72,10 @@ void Application::run() {
 
 		// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-
+		
 			// Triangle
 		glDrawElements(GL_TRIANGLES, _obj->getIndiceBuild().size(), GL_UNSIGNED_INT, 0);
+
 		// glDrawArrays(GL_TRIANGLES, 0, _obj->getVertex().size());
 			// Points
 		// glDrawElements(GL_POINTS, _obj->getIndiceBuild().size() * 3, GL_UNSIGNED_INT, 0);

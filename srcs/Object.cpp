@@ -6,7 +6,7 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/26 18:34:20 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/12/03 12:31:24 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/12/03 15:14:47 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,11 @@ Object::Object() {
 	_uvs.clear();
 	_normals.clear();
 	_faces.clear();
-	
-	_mtl.ka.r = 0.0f; _mtl.ka.g = 0.0f; _mtl.ka.b = 0.0f;
-	_mtl.kd.r = 0.0f; _mtl.kd.g = 0.0f; _mtl.kd.b = 0.0f;
-	_mtl.ks.r = 0.0f; _mtl.ks.g = 0.0f; _mtl.ks.b = 0.0f;
-	_mtl.d = 0.0f; _mtl.Ni = 0.0f; _mtl.Ns = 0.0f;
-	_mtl.illum = 0;
-
+	_verticeBuild.clear();
+	_indiceBuild.clear();
+	_indexMap.clear();
+	_textures.clear();
+	_mtlMap.clear();
 	_name = "Scop";
 }
 
@@ -37,11 +35,15 @@ Object::Object(const Object &other) {
 
 Object &Object::operator=(const Object &other) {
     if (this != &other) {
-		this->_mtl = other._mtl;
+		this->_mtlMap = other._mtlMap;
 		this->_vertices = other._vertices;
 		this->_uvs = other._uvs;
 		this->_normals = other._normals;
 		this->_faces = other._faces;
+		this->_textures = other._textures;
+		this->_verticeBuild = other._verticeBuild;
+		this->_indiceBuild = other._indiceBuild;
+		this->_indexMap = other._indexMap;
 		this->_modelMatrix = other._modelMatrix;
 		this->_name = other._name;		
     }
@@ -52,6 +54,7 @@ void Object::load(char *filePath) {
 	std::ifstream file(filePath);
 	std::string line;
 	std::string prefix;
+	std::string currentMtl = "";
 	
 
 	std::unordered_map<std::string, std::function<void(istringstream&)>> parser = {
@@ -60,7 +63,8 @@ void Object::load(char *filePath) {
 		{"v", [this](std::istringstream& iss) {setVertexCoord(iss);}},
 		{"vn", [this, &prefix](std::istringstream& iss) {setNameAndCoord(iss, prefix);}},
 		{"vt", [this, &prefix](std::istringstream& iss) {setNameAndCoord(iss, prefix);}},
-		{"f", [this](std::istringstream& iss) {setFaces(iss);}}
+		{"f", [this, &currentMtl](std::istringstream& iss) {setFaces(iss, currentMtl);}},
+		{"usemtl", [&currentMtl](std::istringstream& iss) {iss >> currentMtl;}}
 	};
 
 	while(std::getline(file, line)) {
@@ -99,32 +103,43 @@ void Object::setMtAttributes(std::istringstream& iss) {
 	fileName = "resources/" + fileName;
 	std::ifstream file(fileName);
 	if (file.is_open()) {
+		Mtl current;
 		while(std::getline(file, line)) {
 			std::istringstream stream(line);
 			stream >> line;
+			if (line == "newmtl") {
+				std::string name;
+				stream >> name;
+				if (!current.name.empty())
+					_mtlMap[current.name] = current;
+				current = Mtl();
+				current.name = name;
+			}
 			if (line == "Ns") {
-				stream >> _mtl.Ns;
+				stream >> current.Ns;
 			} else if (line == "Ka") {
-				stream >> _mtl.ka.r >> _mtl.ka.g >> _mtl.ka.b;
+				stream >> current.ka.r >> current.ka.g >> current.ka.b;
 			} else if (line == "Kd") {
-				stream >> _mtl.kd.r >> _mtl.kd.g >> _mtl.kd.b;
+				stream >> current.kd.r >> current.kd.g >> current.kd.b;
 			} else if (line == "Ks") {
-				stream >> _mtl.ks.r >> _mtl.ks.g >> _mtl.ks.b;
+				stream >> current.ks.r >> current.ks.g >> current.ks.b;
 			} else if (line == "Ni") {
-				stream >> _mtl.Ni;
+				stream >> current.Ni;
 			} else if (line == "d") {
-				stream >> _mtl.d;
+				stream >> current.d;
 			} else if (line == "illum") {
-				stream >> _mtl.illum;
+				stream >> current.illum;
 			}
 		}
 		file.close();
+		if (!current.name.empty())
+			_mtlMap[current.name] = current;
 	} else {
 		throw fileError(fileName + " file doesn't exist");
 	}
 }
 
-void Object::setFaces(std::istringstream& iss) {
+void Object::setFaces(std::istringstream& iss, std::string currentMtl) {
 	std::string aliquid;
 	_faces.emplace_back();
 	
@@ -146,6 +161,7 @@ void Object::setFaces(std::istringstream& iss) {
 					ind.vn = std::stoi(aliquid.substr(pos2 + 1)) - 1;
 			}
 		}
+		ind.mtlName = currentMtl;
 		_faces.back().push_back(ind);
 	}
 }
@@ -201,24 +217,28 @@ void Object::display() {
 		}
 	}
 
-	std::cout << std::endl << "Material:" << std::endl;
-	std::cout << "ka: (r, g, b) =  " 
-			<< "(" << _mtl.ka.r << ", "
-			<< _mtl.ka.g << ", "
-			<< _mtl.ka.b << ")" << std::endl;
-	std::cout << "kd: (r, g, b) =  " 
-			<< "(" << _mtl.kd.r << ", "
-			<< _mtl.kd.g << ", "
-			<< _mtl.kd.b << ")" << std::endl;
-	std::cout << "ks: (r, g, b) =  " 
-			<< "(" << _mtl.ks.r << ", "
-			<< _mtl.ks.g << ", "
-			<< _mtl.ks.b << ")" << std::endl;
-	std::cout << "Ns, Ni, d, illum: "
-			<< _mtl.Ns << ", "
-			<< _mtl.Ni << ", "
-			<< _mtl.d << ", "
-			<< _mtl.illum << std::endl;
+	std::cout << std::endl << "Materials:" << std::endl;
+	for(auto it = _mtlMap.begin(); it != _mtlMap.end(); ++it) {
+		std::cout << "	Material name: " << it->first << std::endl;
+		Mtl _mtl = it->second;
+		std::cout << "		ka: (r, g, b) =  " 
+				<< "(" << _mtl.ka.r << ", "
+				<< _mtl.ka.g << ", "
+				<< _mtl.ka.b << ")" << std::endl;
+		std::cout << "		kd: (r, g, b) =  " 
+				<< "(" << _mtl.kd.r << ", "
+				<< _mtl.kd.g << ", "
+				<< _mtl.kd.b << ")" << std::endl;
+		std::cout << "		ks: (r, g, b) =  " 
+				<< "(" << _mtl.ks.r << ", "
+				<< _mtl.ks.g << ", "
+				<< _mtl.ks.b << ")" << std::endl;
+		std::cout << "		Ns, Ni, d, illum: "
+				<< _mtl.Ns << ", "
+				<< _mtl.Ni << ", "
+				<< _mtl.d << ", "
+				<< _mtl.illum << std::endl;
+	}
 	std::cout << "Textures:" << std::endl;
 	n = _textures.size();
 	for(int i = 0; i < n; i++) {
@@ -236,7 +256,7 @@ std::vector<unsigned int> Object::getFacesIndices() const {
 	return indice;
 }
 
-void Object::buildTriangle() {
+void Object::buildVertex() {
 	_verticeBuild.clear();
 	_indiceBuild.clear();
 	_indexMap.clear();
@@ -265,6 +285,14 @@ void Object::buildTriangle() {
 					v.uv.y = 1.0f - v.uv.y; // OpenGl need an origin at bottom-left but Blender at top-left
 					_verticeBuild.push_back(v);
 					_indexMap[key] = _verticeBuild.size() - 1;
+
+					if (!f[idx].mtlName.empty()) {
+						Mtl mtl = _mtlMap[f[idx].mtlName];
+						if (_textures.size())
+							v.hasTex = 1.0f;
+						else
+							v.color = Vect3(mtl.kd.r, mtl.kd.g, mtl.kd.b);
+					}
 				}
 
 				_indiceBuild.push_back(_indexMap[key]);

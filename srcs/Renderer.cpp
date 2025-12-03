@@ -6,7 +6,7 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 10:18:27 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/12/01 18:08:59 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/12/03 15:20:32 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,6 +151,14 @@ void Renderer::setUpMesh(const Object& obj) {
 		// Texture
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, uv));
 	glEnableVertexAttribArray(2);
+
+		// Material color
+	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, color));
+	glEnableVertexAttribArray(3);
+
+		// Has Texture
+	glVertexAttribPointer(4, 1, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, hasTex));
+	glEnableVertexAttribArray(4);
 
 	// EBO
 	std::vector<unsigned int> indice = obj.getIndiceBuild();

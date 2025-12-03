@@ -6,7 +6,7 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/26 18:34:11 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/12/03 10:49:44 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/12/03 14:50:55 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,9 @@ class Object {
 		void setNameAndCoord(std::istringstream&, std::string);
 		void setVertexCoord(std::istringstream&);
 		void setMtAttributes(std::istringstream&);
-		void setFaces(std::istringstream&);
+		void setFaces(std::istringstream&, std::string);
 
-		void buildTriangle(); // Vertices interleaves
+		void buildVertex(); // Vertices interleaves
 		void saveTex(int, char **);
 
 		std::string getName() {return _name;};
@@ -56,7 +56,7 @@ class Object {
 		void display();
 		
 	private:
-		Mtl _mtl;
+		std::unordered_map<std::string, Mtl> _mtlMap;
 		std::vector<Vect3> _vertices;
 		std::vector<Vect2> _uvs;
 		std::vector<Vect3> _normals;
