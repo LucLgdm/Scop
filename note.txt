@@ -30,3 +30,9 @@ Renderer ne stocke pas les objets eux-memes mais s'occupe de tout ce qui est pre
 
 vertex.glsl :
 	
+BuildTriangle : 
+	Si 2 faces partagent la meme position mais ont des UV et normales differents, on fait 2 Vertex differents
+	Les triangles ne sont pas decales : chaque triangle utilise exactement les bonnes normales/UV/position
+	Si 2 faces utilisent les memes triplets (v, vt, vn), on reutilise le Vertex au lieu d'en creer un nouveau
+	
+

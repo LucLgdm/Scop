@@ -6,7 +6,7 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/26 18:34:20 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/12/03 11:18:49 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/12/03 12:31:24 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -262,6 +262,7 @@ void Object::buildTriangle() {
 					else
 						v.uv = Vect2(0.0f, 0.0f);
 						
+					v.uv.y = 1.0f - v.uv.y; // OpenGl need an origin at bottom-left but Blender at top-left
 					_verticeBuild.push_back(v);
 					_indexMap[key] = _verticeBuild.size() - 1;
 				}

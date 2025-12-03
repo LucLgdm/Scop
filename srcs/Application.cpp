@@ -6,7 +6,7 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 11:44:45 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/12/03 11:28:41 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/12/03 11:50:22 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void Application::run() {
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, _renderer.getTexGPU(0));
 
-		GLint texLoc = glGetUniformLocation(_renderer.getShaderProg(), "tex0");
+		GLint texLoc = glGetUniformLocation(_renderer.getShaderProg(), "uTexture");
 		glUniform1i(texLoc, 0);
 
 		_viewMatrix = Mat4::lookAt(Vect3(45 * std::cos(time), 45 * std::sin(time), 10.0f),
@@ -71,8 +71,8 @@ void Application::run() {
 		glBindVertexArray(_renderer.getVAO());
 		glBindTexture(GL_TEXTURE_2D, _renderer.getTexGPU(0));
 
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		// glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 			// Triangle
 		glDrawElements(GL_TRIANGLES, _obj->getIndiceBuild().size(), GL_UNSIGNED_INT, 0);
