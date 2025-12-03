@@ -6,7 +6,7 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 10:18:27 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/12/03 15:20:32 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/12/03 16:55:43 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,10 +84,11 @@ void Renderer::loadTextures(const Object& obj) {
 		int width, height, channels;
 		unsigned char* data = stbi_load(texPath[i].c_str(), &width, &height, &channels, 0);
 		if (!data)
-			throw fileError("Failed to load texture");
+			throw fileError("Failed to load texture: " + texPath[i]);
 		
 		GLuint texture;
 		glGenTextures(1, &texture);
+		glActiveTexture(GL_TEXTURE0 + i);
 		glBindTexture(GL_TEXTURE_2D, texture);
 
 		GLenum format = (channels == 4) ? GL_RGBA : GL_RGB;

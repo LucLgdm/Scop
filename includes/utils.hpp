@@ -6,7 +6,7 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 09:53:55 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/12/03 15:14:38 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/12/03 16:44:10 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ struct Mtl {
 	Ks ks;
 	float Ns, Ni, d;
 	int illum;
+	std::string mapKd;
 	
 	Mtl() : name(""), Ns(0), Ni(0), d(0), illum(0) {
 		ka = {0, 0, 0};

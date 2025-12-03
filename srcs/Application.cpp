@@ -6,7 +6,7 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 11:44:45 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/12/03 15:19:04 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/12/03 17:12:52 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ Application::~Application() {
 void Application::init(int argc, char **argv) {
 	inputValidate(argc, argv);
 	_obj->load(argv[1]);		// Load the mesh
-	_obj->saveTex(argc, argv);	// Load the textures
+	_obj->setTexturesPath();	// Load the textures
 	_obj->buildVertex();
 	initGLFW();					// Create the window
 	initOpenGL();				// Configure OpenGl global
@@ -90,11 +90,10 @@ void Application::cleanup() {
 }
 
 void Application::inputValidate(int argc, char **argv) {
-	if (argc < 3) {
+	if (argc < 2) {
 		std::stringstream ss;
 		ss << "Not enough arguments,\n";
-		ss << "The program needs the following:\n";
-		ss << "An object file, textures.";
+		ss << "The program needs an object file";
 		throw std::runtime_error(ss.str());
 	}
 	std::string fileName = argv[1];

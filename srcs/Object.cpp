@@ -6,7 +6,7 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/26 18:34:20 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/12/03 15:14:47 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/12/03 17:12:45 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,6 +129,8 @@ void Object::setMtAttributes(std::istringstream& iss) {
 				stream >> current.d;
 			} else if (line == "illum") {
 				stream >> current.illum;
+			} else if (line == "map_Kd") {
+				stream >> current.mapKd;
 			}
 		}
 		file.close();
@@ -172,12 +174,17 @@ void Object::setVertexCoord(std::istringstream& iss) {
 	_vertices.push_back(vertex);
 }
 
-void Object::saveTex(int argc, char **argv) {
-	if (argv[2] == nullptr)
-		throw fileError("Missing a texture file !");
-	for(int i = 2; i < argc; i++)
-		_textures.push_back(std::string(argv[i]));
+void Object::setTexturesPath() {
+	
+	for (const auto& mtlpair : _mtlMap) {
+		const Mtl& mtl = mtlpair.second;
+		if (!mtl.mapKd.empty()) {
+			_textures.push_back("textures/" + mtl.mapKd);
+		}
+		
+	}
 }
+
 
 void Object::display() {
 	std::cout << "Name: " << _name << std::endl;
@@ -213,7 +220,7 @@ void Object::display() {
 			std::cout << "	index [" << j << "] : (v, vt, vn) = "
 					  << "(" << _faces[i][j].v << ", "
 					  << _faces[i][j].vt << ", "
-					  << _faces[i][j].vn << ")" << std::endl;
+					  << _faces[i][j].vn << "), mtl: " << _faces[i][j].mtlName << std::endl;
 		}
 	}
 
@@ -238,6 +245,7 @@ void Object::display() {
 				<< _mtl.Ni << ", "
 				<< _mtl.d << ", "
 				<< _mtl.illum << std::endl;
+		std::cout << "		map_Kd: " << _mtl.mapKd << std::endl;
 	}
 	std::cout << "Textures:" << std::endl;
 	n = _textures.size();
@@ -283,16 +291,16 @@ void Object::buildVertex() {
 						v.uv = Vect2(0.0f, 0.0f);
 						
 					v.uv.y = 1.0f - v.uv.y; // OpenGl need an origin at bottom-left but Blender at top-left
-					_verticeBuild.push_back(v);
-					_indexMap[key] = _verticeBuild.size() - 1;
 
 					if (!f[idx].mtlName.empty()) {
-						Mtl mtl = _mtlMap[f[idx].mtlName];
-						if (_textures.size())
+						const Mtl mtl = _mtlMap[f[idx].mtlName];
+						if (!mtl.mapKd.empty())
 							v.hasTex = 1.0f;
 						else
 							v.color = Vect3(mtl.kd.r, mtl.kd.g, mtl.kd.b);
 					}
+					_verticeBuild.push_back(v);
+					_indexMap[key] = _verticeBuild.size() - 1;
 				}
 
 				_indiceBuild.push_back(_indexMap[key]);
