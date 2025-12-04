@@ -6,7 +6,7 @@
 			"type": "cppdbg",
 			"request": "launch",
 			"program": "${workspaceFolder}/Scop", 
-			"args": ["resources/42.obj"],
+			"args": ["resources/parrot.obj textures/parrot.jpeg"],
 			"stopAtEntry": false,
 			"cwd": "${workspaceFolder}",
 			"environment": [],

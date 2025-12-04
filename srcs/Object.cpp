@@ -6,7 +6,7 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/26 18:34:20 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/12/04 10:34:10 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/12/04 17:24:03 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ Object::Object() {
 	_verticeMax = Vect3(std::numeric_limits<float>::lowest(),
 						std::numeric_limits<float>::lowest(),
 						std::numeric_limits<float>::lowest());
+	_m = KeyState();
 }
 
 Object::~Object() {}
@@ -368,4 +369,16 @@ void Object::centerAndScaleToUnit() {
 	
 	_modelMatrix = Mat4::translate( -center.x, -center.y, -center.z )
 				* Mat4::scale( scale, scale, scale );
+}
+
+void Object::updateMatrix(GLFWwindow* win) {
+	_m.update(glfwGetKey(win, GLFW_KEY_M) == GLFW_PRESS);
+	if (_m.pressed()) {
+		_stopMove = !_stopMove;
+	}
+	
+	if (!_stopMove) {
+		float angle = 1.0f/360.0f; // rotation speed
+		_modelMatrix = _modelMatrix * Mat4::rotateY(angle);
+	}
 }

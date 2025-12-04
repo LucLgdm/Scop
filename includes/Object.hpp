@@ -6,7 +6,7 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/26 18:34:11 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/12/04 10:33:33 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/12/04 17:22:31 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,11 @@
 #include <algorithm>
 #include <limits>
 
+#define GLFW_INCLUDE_NONE
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+
 #include "Mat4.hpp"
-#include "utils.hpp"
 #include "exception.hpp"
 
 
@@ -61,9 +64,12 @@ class Object {
 
 		void setTexturesPath(int, char **);
 		
+		void updateMatrix(GLFWwindow*);
+
 		void display();
 		
 	private:
+		std::string _name;
 		std::unordered_map<std::string, Mtl> _mtlMap;
 		std::vector<Vect3> _vertices;
 		std::vector<Vect2> _uvs;
@@ -79,6 +85,6 @@ class Object {
 		std::map<std::tuple<int, int, int>, unsigned int> _indexMap;
 
 		Mat4 _modelMatrix;
-
-		std::string _name;
+		KeyState _m;
+		bool _stopMove = false;
 };

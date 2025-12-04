@@ -6,7 +6,7 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 09:53:55 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/12/04 09:22:09 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/12/04 17:11:42 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,3 +102,22 @@ struct Mtl {
 		ks = {0, 0, 0};
 	}
 };
+
+struct KeyState {
+    bool isDown = false;
+    bool wasDown = false;
+
+    bool pressed() const {
+        return isDown && !wasDown;
+    }
+
+    bool released() const {
+        return !isDown && wasDown;
+    }
+
+    void update(bool currentDown) {
+        wasDown = isDown;
+        isDown = currentDown;
+    }
+};
+

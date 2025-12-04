@@ -6,7 +6,7 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 11:44:45 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/12/04 11:19:20 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/12/04 17:08:13 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,10 @@ void Application::run() {
 			GLint texLoc = glGetUniformLocation(_renderer.getShaderProg(), "uTexture");
 			glUniform1i(texLoc, 0);
 		}
+			// Update matrix
+		_obj->updateMatrix(_window);
 			// Update camera
-		_camera.updateview(time);
+		_camera.updateCam(_window, time);
 		
 			// Set uniforms
 		GLuint modelLoc = glGetUniformLocation(_renderer.getShaderProg(), "model");

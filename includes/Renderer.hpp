@@ -6,7 +6,7 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 10:18:20 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/12/04 11:08:52 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/12/04 17:16:51 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,6 @@
 #include <fstream>
 #include <sstream>
 #include <string>
-
-#define GLFW_INCLUDE_NONE
-#include <GLFW/glfw3.h>
-#include <glad/glad.h>
 
 #include "Object.hpp"
 
