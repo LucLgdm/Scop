@@ -6,7 +6,7 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/26 18:34:11 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/12/03 17:03:40 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/12/04 08:14:41 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 #include <functional>
 #include <map>
 #include <array>
+#include <algorithm>
 
 #include "Mat4.hpp"
 #include "utils.hpp"
@@ -53,7 +54,8 @@ class Object {
 		Mat4 getMat() const {return _modelMatrix;};
 		std::vector<unsigned int> getFacesIndices() const;
 
-		void setTexturesPath();
+		void setTexturesPath(int, char **);
+		
 		void display();
 		
 	private:

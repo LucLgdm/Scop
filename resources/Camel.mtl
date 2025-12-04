@@ -12,5 +12,5 @@ newmtl 10007_Camel_v03
 	Kd 0.5882 0.5882 0.5882
 	Ks 0.0000 0.0000 0.0000
 	Ke 0.3235 0.3235 0.3235
-	map_Ka 10007_Camel_v03.jpg
-	map_Kd 10007_Camel_v03.jpg
+	map_Ka camel.jpeg
+	map_Kd camel.jpeg

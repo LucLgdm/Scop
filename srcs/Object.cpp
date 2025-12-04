@@ -6,7 +6,7 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/26 18:34:20 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/12/03 17:12:45 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/12/04 08:25:24 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,17 +174,43 @@ void Object::setVertexCoord(std::istringstream& iss) {
 	_vertices.push_back(vertex);
 }
 
-void Object::setTexturesPath() {
+void Object::setTexturesPath(int argc, char **argv) {
 	
 	for (const auto& mtlpair : _mtlMap) {
 		const Mtl& mtl = mtlpair.second;
 		if (!mtl.mapKd.empty()) {
 			_textures.push_back("textures/" + mtl.mapKd);
 		}
-		
+	}
+	
+	if (argc != 1) {
+		for (int i = 2; i < argc; ++i) {
+			_textures.push_back(std::string(argv[i]));
+		}
+	}
+	
+	// Remove duplicates
+	std::sort(_textures.begin(), _textures.end());
+	auto last = std::unique(_textures.begin(), _textures.end());
+	_textures.erase(last, _textures.end());
+
+	// put back the textures in the order of the materials
+	std::vector<std::string> tmp;
+	tmp = _textures;
+	_textures.clear();
+	for (const auto& mtlpair : _mtlMap) {
+		const Mtl& mtl = mtlpair.second;
+		if (!mtl.mapKd.empty()) {
+			std::string texPath = "textures/" + mtl.mapKd;
+			_textures.push_back(texPath);
+		}
+	}
+	for (const auto& path : tmp) {
+		if (std::find(_textures.begin(), _textures.end(), path) == _textures.end()) {
+			_textures.push_back(path);
+		}
 	}
 }
-
 
 void Object::display() {
 	std::cout << "Name: " << _name << std::endl;

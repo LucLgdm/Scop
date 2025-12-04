@@ -36,3 +36,5 @@ buildVertex :
 	Si 2 faces utilisent les memes triplets (v, vt, vn), on reutilise le Vertex au lieu d'en creer un nouveau
 
 
+.mtl
+

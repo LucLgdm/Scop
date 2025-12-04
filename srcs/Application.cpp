@@ -6,7 +6,7 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 11:44:45 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/12/03 17:12:52 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/12/04 07:59:33 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ Application::~Application() {
 void Application::init(int argc, char **argv) {
 	inputValidate(argc, argv);
 	_obj->load(argv[1]);		// Load the mesh
-	_obj->setTexturesPath();	// Load the textures
+	_obj->setTexturesPath(argc, argv);	// Load the textures
 	_obj->buildVertex();
 	initGLFW();					// Create the window
 	initOpenGL();				// Configure OpenGl global
@@ -45,17 +45,19 @@ void Application::init(int argc, char **argv) {
 void Application::run() {
 	while (!glfwWindowShouldClose(_window)) {
 		float time = glfwGetTime() / 2;
-
+		
 		glClearColor(0.2f, 0.2f, 0.17f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+		
 		glUseProgram(_renderer.getShaderProg());
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, _renderer.getTexGPU(0));
-
-		GLint texLoc = glGetUniformLocation(_renderer.getShaderProg(), "uTexture");
-		glUniform1i(texLoc, 0);
-
+		
+			// Bind texture
+		if (_obj->getTexturesPath().size() > 0)	{
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, _renderer.getTexGPU(0));
+			GLint texLoc = glGetUniformLocation(_renderer.getShaderProg(), "uTexture");
+			glUniform1i(texLoc, 0);
+		}
 		_viewMatrix = Mat4::lookAt(Vect3(45 * std::cos(time), 45 * std::sin(time), 10.0f),
 								Vect3(0.0f, 0.0f, 12.0f),
 								Vect3(0.0f, 0.0f, 1.0f));
@@ -68,7 +70,6 @@ void Application::run() {
 		glUniformMatrix4fv(projLoc,  1, GL_FALSE, _projMatrix.data());
 
 		glBindVertexArray(_renderer.getVAO());
-		glBindTexture(GL_TEXTURE_2D, _renderer.getTexGPU(0));
 
 		// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -90,10 +91,11 @@ void Application::cleanup() {
 }
 
 void Application::inputValidate(int argc, char **argv) {
-	if (argc < 2) {
+	if (argc == 1) {
 		std::stringstream ss;
 		ss << "Not enough arguments,\n";
-		ss << "The program needs an object file";
+		ss << "The program needs at least an object file in .obj format";
+		ss << "and optionally texture files in .jpeg format.\n";
 		throw std::runtime_error(ss.str());
 	}
 	std::string fileName = argv[1];
