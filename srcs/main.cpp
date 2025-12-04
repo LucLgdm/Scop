@@ -6,7 +6,7 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 10:15:45 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/12/03 10:56:15 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/12/04 11:12:16 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,5 @@ int main(int argc, char *argv[]) {
 	} catch (std::runtime_error &e) {
 		std::cerr << e.what() << std::endl;
 	}
-	app.cleanup();
 	return 0;
 }

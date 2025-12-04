@@ -1,7 +1,7 @@
 # 3ds Max Wavefront OBJ Exporter v0.97b - (c)2007 guruware
 # File Created: www.cadnav.com
 
-mtllib 42.mtl
+# mtllib 42.mtl
 
 #
 # object Parrot
@@ -11868,7 +11868,7 @@ vt 0.5226 0.5968 0.0000
 
 o Parrot
 g Parrot
-usemtl Material__38
+
 s off
 f 1/1/1 2/2/2 3/3/3 
 f 3/3/3 4/4/4 1/1/1 

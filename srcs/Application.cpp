@@ -6,7 +6,7 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 11:44:45 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/12/04 07:59:33 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/12/04 11:19:20 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,32 +14,31 @@
 
 Application::Application() {
 	_obj = new Object;
-	_viewMatrix = Mat4::lookAt(
-		Vect3(0.0f, 40.0f, -10.0f),
-		Vect3(0.0f, 0.0f, 0.0f),
-		Vect3(0.0f, 0.0f, 1.0f)
-	);
-	_projMatrix = Mat4::identity();
 }
 
 Application::~Application() {
 	delete _obj;
+	cleanup();
 }
 
 void Application::init(int argc, char **argv) {
 	inputValidate(argc, argv);
-	_obj->load(argv[1]);		// Load the mesh
+	
+	_obj->load(argc, argv[1]);		// Load the mesh
+	_obj->centerAndScaleToUnit(); // Center and scale the object
 	_obj->setTexturesPath(argc, argv);	// Load the textures
 	_obj->buildVertex();
+
 	initGLFW();					// Create the window
 	initOpenGL();				// Configure OpenGl global
+
 	_renderer.init();			// Load the shaders
 	_renderer.loadTextures(*_obj);
-	_renderer.setUpMesh(*_obj);	
+	_renderer.setUpMesh(*_obj);
+
 	// _obj->display();
 	// _renderer.display();
 	
-	_projMatrix = Mat4::perspective(45.0f, (float)WIDTH/(float)HEIGHT, 0.1f, 100.0f);
 }
 
 void Application::run() {
@@ -58,16 +57,17 @@ void Application::run() {
 			GLint texLoc = glGetUniformLocation(_renderer.getShaderProg(), "uTexture");
 			glUniform1i(texLoc, 0);
 		}
-		_viewMatrix = Mat4::lookAt(Vect3(45 * std::cos(time), 45 * std::sin(time), 10.0f),
-								Vect3(0.0f, 0.0f, 12.0f),
-								Vect3(0.0f, 0.0f, 1.0f));
+			// Update camera
+		_camera.updateview(time);
+		
+			// Set uniforms
 		GLuint modelLoc = glGetUniformLocation(_renderer.getShaderProg(), "model");
 		GLuint viewLoc  = glGetUniformLocation(_renderer.getShaderProg(), "view");
 		GLuint projLoc  = glGetUniformLocation(_renderer.getShaderProg(), "projection");
 
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, _obj->getMat().data());
-		glUniformMatrix4fv(viewLoc,  1, GL_FALSE, _viewMatrix.data());
-		glUniformMatrix4fv(projLoc,  1, GL_FALSE, _projMatrix.data());
+		glUniformMatrix4fv(viewLoc,  1, GL_FALSE, _camera.getViewMatrix().data());
+		glUniformMatrix4fv(projLoc,  1, GL_FALSE, _camera.getProjMatrix().data());
 
 		glBindVertexArray(_renderer.getVAO());
 
@@ -87,6 +87,7 @@ void Application::run() {
 }
 
 void Application::cleanup() {
+	glfwDestroyWindow(_window);
 	glfwTerminate();
 }
 

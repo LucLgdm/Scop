@@ -6,7 +6,7 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/26 18:34:20 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/12/04 08:25:24 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/12/04 10:34:10 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,12 @@ Object::Object() {
 	_textures.clear();
 	_mtlMap.clear();
 	_name = "Scop";
+	_verticeMin = Vect3(std::numeric_limits<float>::max(),
+						std::numeric_limits<float>::max(),
+						std::numeric_limits<float>::max());
+	_verticeMax = Vect3(std::numeric_limits<float>::lowest(),
+						std::numeric_limits<float>::lowest(),
+						std::numeric_limits<float>::lowest());
 }
 
 Object::~Object() {}
@@ -50,7 +56,7 @@ Object &Object::operator=(const Object &other) {
     return *this;
 }
 
-void Object::load(char *filePath) {
+void Object::load(int argc, char *filePath) {
 	std::ifstream file(filePath);
 	std::string line;
 	std::string prefix;
@@ -79,6 +85,8 @@ void Object::load(char *filePath) {
 	file.close();
 	if (_vertices.empty() || _faces.empty())
 		throw fileError("There isn't any vertices or faces");
+	if (_textures.empty() && argc == 2 && _mtlMap.empty())
+		throw fileError("No texture or material found");
 }
 
 void Object::setNameAndCoord(std::istringstream& iss, std::string prefix) {
@@ -172,6 +180,14 @@ void Object::setVertexCoord(std::istringstream& iss) {
 	Vect3 vertex;
 	iss >> vertex.x >> vertex.y >> vertex.z;
 	_vertices.push_back(vertex);
+		// Update min and max vertices
+	if (vertex.x < _verticeMin.x) _verticeMin.x = vertex.x;
+	if (vertex.y < _verticeMin.y) _verticeMin.y = vertex.y;
+	if (vertex.z < _verticeMin.z) _verticeMin.z = vertex.z;
+
+	if (vertex.x > _verticeMax.x) _verticeMax.x = vertex.x;
+	if (vertex.y > _verticeMax.y) _verticeMax.y = vertex.y;
+	if (vertex.z > _verticeMax.z) _verticeMax.z = vertex.z;
 }
 
 void Object::setTexturesPath(int argc, char **argv) {
@@ -276,7 +292,7 @@ void Object::display() {
 	std::cout << "Textures:" << std::endl;
 	n = _textures.size();
 	for(int i = 0; i < n; i++) {
-		std::cout << "	" << i << ": " << _textures[i] << std::endl;
+		std::cout << "	" << i + 1<< " : " << _textures[i] << std::endl;
 	}
 }
 
@@ -324,7 +340,8 @@ void Object::buildVertex() {
 							v.hasTex = 1.0f;
 						else
 							v.color = Vect3(mtl.kd.r, mtl.kd.g, mtl.kd.b);
-					}
+					} else
+						v.hasTex = 1.0f;
 					_verticeBuild.push_back(v);
 					_indexMap[key] = _verticeBuild.size() - 1;
 				}
@@ -333,4 +350,22 @@ void Object::buildVertex() {
 			}
 		}
 	}
+}
+
+void Object::centerAndScaleToUnit() {
+	Vect3 center(
+		(_verticeMin.x + _verticeMax.x) / 2.0f,
+		(_verticeMin.y + _verticeMax.y) / 2.0f,
+		(_verticeMin.z + _verticeMax.z) / 2.0f
+	);
+	float maxDim = std::max({
+		_verticeMax.x - _verticeMin.x,
+		_verticeMax.y - _verticeMin.y,
+		_verticeMax.z - _verticeMin.z
+	});
+	
+	float scale = (maxDim > 0) ? (1.0f / maxDim) : 1.0f;
+	
+	_modelMatrix = Mat4::translate( -center.x, -center.y, -center.z )
+				* Mat4::scale( scale, scale, scale );
 }

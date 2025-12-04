@@ -6,7 +6,7 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 09:36:08 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/12/01 18:16:54 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/12/04 11:04:56 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,7 @@
 #include "exception.hpp"
 #include "Object.hpp"
 #include "Renderer.hpp"
-
-static int HEIGHT = 1200;
-static int WIDTH = 1600;
+#include "Camera.hpp"
 
 class Application {
 	public :
@@ -36,14 +34,13 @@ class Application {
 		void cleanup();
 
 		Object *getObj() {return _obj;}
+		Renderer &getRenderer() {return _renderer;};
 		
 	private :
 		GLFWwindow* _window;
 		Object *_obj;
 		Renderer _renderer;
-
-		Mat4 _viewMatrix;
-		Mat4 _projMatrix;
+		Camera _camera;
 		
 		void initGLFW();
 		void initOpenGL();

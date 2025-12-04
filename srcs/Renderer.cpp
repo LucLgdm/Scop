@@ -6,7 +6,7 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 10:18:27 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/12/03 16:55:43 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/12/04 11:18:59 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,26 +18,37 @@
 // Constructeur
 Renderer::Renderer() {
 	_vao = 0;
-	_vboPositions = 0; _vboNormals = 0; _vboUVs = 0;
 	_ebo = 0;
 	_shaderProgram = 0;
 }
 
 Renderer::~Renderer() {}
 
+void Renderer::cleanup() {
+	if (_ebo) glDeleteBuffers(1, &_ebo);
+    if (_vbo) glDeleteBuffers(1, &_vbo);
+	if (_vao) glDeleteVertexArrays(1, &_vao);
+    if (!_texturesGPU.empty()) {
+		for(auto tex : _texturesGPU) {
+			glDeleteTextures(1, &tex);
+		}
+	}
+    if (_shaderProgram) glDeleteProgram(_shaderProgram);
+}
+
 Renderer::Renderer(const Renderer &other) {
     *this = other;
 }
 
 Renderer &Renderer::operator=(const Renderer &other) {
-    if (this != &other) {
-        this->_vao = other._vao;
-        this->_vboPositions = other._vboPositions;
-        this->_vboNormals = other._vboNormals;
-        this->_vboUVs = other._vboUVs;
-        this->_ebo = other._ebo;
-    }
-    return *this;	
+	if (this != &other) {
+		this->_vao = other._vao;
+		this->_vbo = other._vbo;
+		this->_ebo = other._ebo;
+		this->_shaderProgram = other._shaderProgram;
+		this->_texturesGPU = other._texturesGPU;
+	}
+	return *this;	
 }
 
 static std::string readFile(const char* path) {
@@ -105,35 +116,12 @@ void Renderer::loadTextures(const Object& obj) {
 		stbi_image_free(data);
 		_texturesGPU.push_back(texture);
 	}
+
 }
 
 void Renderer::setUpMesh(const Object& obj) {
 	glGenVertexArrays(1, &_vao);
 	glBindVertexArray(_vao);
-
-	// // Points
-	// glGenBuffers(1, &_vboPositions);
-	// glBindBuffer(GL_ARRAY_BUFFER, _vboPositions);
-	// glBufferData(GL_ARRAY_BUFFER, obj.getPositions().size() * sizeof(Vect3),
-	// 			obj.getPositions().data(), GL_STATIC_DRAW);
-	// glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
-	// glEnableVertexAttribArray(0);
-
-	// // Normals
-	// glGenBuffers(1, &_vboNormals);
-	// glBindBuffer(GL_ARRAY_BUFFER, _vboNormals);
-	// glBufferData(GL_ARRAY_BUFFER, obj.getNormals().size() * sizeof(Vect3),
-	// 			obj.getNormals().data(), GL_STATIC_DRAW);
-	// glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
-	// glEnableVertexAttribArray(1);
-
-	// // UVs
-	// glGenBuffers(1, &_vboUVs);
-	// glBindBuffer(GL_ARRAY_BUFFER, _vboUVs);
-	// glBufferData(GL_ARRAY_BUFFER, obj.getUVs().size() * sizeof(Vect2),
-	// 			obj.getUVs().data(), GL_STATIC_DRAW);
-	// glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
-	// glEnableVertexAttribArray(2);
 
 	// VBO unique
 	glGenBuffers(1, &_vbo);
@@ -174,9 +162,7 @@ void Renderer::setUpMesh(const Object& obj) {
 
 void Renderer::display() {
 	std::cout << "vao : " << _vao << std::endl;
-	std::cout << "vbo position : " << _vboPositions << std::endl;
-	std::cout << "vbo Normals : " << _vboNormals << std::endl;
-	std::cout << "vbo UVs: " << _vboUVs<< std::endl;
+	std::cout << "vbo : " << _vbo << std::endl;
 	std::cout << "ebo : " << _ebo << std::endl;
 	std::cout << "shaderProgram : " << _shaderProgram << std::endl;
 

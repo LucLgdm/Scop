@@ -6,13 +6,16 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 09:53:55 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/12/03 16:44:10 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/12/04 09:22:09 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
 #include <string>
+
+static int HEIGHT = 1200;
+static int WIDTH = 1600;
 
 struct Vect3 {
 	float x, y, z;

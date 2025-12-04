@@ -6,7 +6,7 @@
 #    By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/11/18 10:18:17 by lde-merc          #+#    #+#              #
-#    Updated: 2025/11/28 11:00:34 by lde-merc         ###   ########.fr        #
+#    Updated: 2025/12/04 10:49:59 by lde-merc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,7 @@ LDFLAGS  = -lglfw -ldl -lm -lGL
 vpath %.cpp srcs/
 vpath %.c srcs/
 
-SRC      = main.cpp Object.cpp Mat4.cpp Application.cpp Renderer.cpp
+SRC      = main.cpp Object.cpp Mat4.cpp Application.cpp Renderer.cpp Camera.cpp
 SRCC     = glad.c
 
 # Object directories
@@ -64,7 +64,7 @@ re: fclean all
 	@echo "\033[33mRebuild done!\033[0m"
 
 val: all
-	valgrind --leak-check=full --show-leak-kinds=all --errors-for-leak-kinds=definite ./$(NAME) ressources/test.obj tex || true
+	valgrind --leak-check=full --show-leak-kinds=all --errors-for-leak-kinds=definite ./$(NAME) resources/42.obj || true
 
 # Include dependencies
 -include $(DEP)

@@ -6,7 +6,7 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 10:18:20 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/12/01 17:18:03 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/12/04 11:08:52 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,10 @@ class Renderer {
 		GLuint getTexGPU(int i) const {return _texturesGPU[i];};
 
 		void display();
+		void cleanup();
 		
 	private:
 		GLuint _vao;
-		GLuint _vboPositions;
-		GLuint _vboNormals;
-		GLuint _vboUVs;
 		GLuint _vbo;
 		GLuint _ebo;
 		GLuint _shaderProgram;

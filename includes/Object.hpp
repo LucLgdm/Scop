@@ -6,7 +6,7 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/26 18:34:11 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/12/04 08:14:41 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/12/04 10:33:33 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 #include <map>
 #include <array>
 #include <algorithm>
+#include <limits>
 
 #include "Mat4.hpp"
 #include "utils.hpp"
@@ -35,11 +36,13 @@ class Object {
 		
 		Object &operator=(const Object &other);
 		
-		void load(char *);
+		void load(int, char *);
 		void setNameAndCoord(std::istringstream&, std::string);
 		void setVertexCoord(std::istringstream&);
 		void setMtAttributes(std::istringstream&);
 		void setFaces(std::istringstream&, std::string);
+
+		void centerAndScaleToUnit();
 
 		void buildVertex(); // Vertices interleaves
 		void saveTex(int, char **);
@@ -53,6 +56,8 @@ class Object {
 		std::vector<unsigned int> getIndiceBuild() const {return _indiceBuild;};
 		Mat4 getMat() const {return _modelMatrix;};
 		std::vector<unsigned int> getFacesIndices() const;
+		Vect3 getVerticeMin() const {return _verticeMin;};
+		Vect3 getVerticeMax() const {return _verticeMax;};
 
 		void setTexturesPath(int, char **);
 		
@@ -64,6 +69,9 @@ class Object {
 		std::vector<Vect2> _uvs;
 		std::vector<Vect3> _normals;
 		std::vector<std::vector<Index>> _faces;
+
+		Vect3 _verticeMin;
+		Vect3 _verticeMax;
 
 		std::vector<std::string> _textures;
 		std::vector<Vertex> _verticeBuild;
