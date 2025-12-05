@@ -6,14 +6,17 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 11:44:45 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/12/04 17:08:13 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/12/05 14:03:12 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Application.hpp"
 
-Application::Application() {
+Application::Application(): _state(0) {
 	_obj = new Object;
+	_keys[GLFW_KEY_P] = KeyState();
+	_keys[GLFW_KEY_ESCAPE] = KeyState();
+	_indiceTex = 0;
 }
 
 Application::~Application() {
@@ -53,7 +56,7 @@ void Application::run() {
 			// Bind texture
 		if (_obj->getTexturesPath().size() > 0)	{
 			glActiveTexture(GL_TEXTURE0);
-			glBindTexture(GL_TEXTURE_2D, _renderer.getTexGPU(0));
+			glBindTexture(GL_TEXTURE_2D, _renderer.getTexGPU(_indiceTex));
 			GLint texLoc = glGetUniformLocation(_renderer.getShaderProg(), "uTexture");
 			glUniform1i(texLoc, 0);
 		}
@@ -61,7 +64,8 @@ void Application::run() {
 		_obj->updateMatrix(_window);
 			// Update camera
 		_camera.updateCam(_window, time);
-		
+			// Update state
+		updateState();
 			// Set uniforms
 		GLuint modelLoc = glGetUniformLocation(_renderer.getShaderProg(), "model");
 		GLuint viewLoc  = glGetUniformLocation(_renderer.getShaderProg(), "view");
@@ -76,13 +80,17 @@ void Application::run() {
 		// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		
-			// Triangle
-		glDrawElements(GL_TRIANGLES, _obj->getIndiceBuild().size(), GL_UNSIGNED_INT, 0);
-
-		// glDrawArrays(GL_TRIANGLES, 0, _obj->getVertex().size());
-			// Points
-		// glDrawElements(GL_POINTS, _obj->getIndiceBuild().size() * 3, GL_UNSIGNED_INT, 0);
-
+		switch (_state){
+			case 0 : // Triangle
+				glDrawElements(GL_TRIANGLES, _obj->getIndiceBuild().size(), GL_UNSIGNED_INT, 0);
+				break;
+			case 1 : // Points
+				glDrawElements(GL_POINTS, _obj->getIndiceBuild().size(), GL_UNSIGNED_INT, 0);
+				break;
+			case 2 : // Lines
+				glDrawElements(GL_LINES, _obj->getIndiceBuild().size(), GL_UNSIGNED_INT, 0);	
+				break;
+		}
 		glfwSwapBuffers(_window);
 		glfwPollEvents();
 	}
@@ -143,4 +151,22 @@ void Application::initOpenGL() {
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
+}
+
+void Application::updateState() {
+	for(auto &key : _keys) {
+		key.second.update(glfwGetKey(_window, key.first) == GLFW_PRESS);
+	}
+
+	if (_keys[GLFW_KEY_P].pressed())
+		_state++;
+	if (_state == 3)
+		_state = 0;
+
+	if (_keys[GLFW_KEY_T].pressed())
+		_indiceTex++;
+	if (_indiceTex == _obj->getTexturesPath().size())
+		_indiceTex = 0;
+	if (_keys[GLFW_KEY_ESCAPE].pressed())
+		glfwSetWindowShouldClose(_window, true);
 }

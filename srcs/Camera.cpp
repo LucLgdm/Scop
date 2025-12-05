@@ -6,7 +6,7 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/04 09:19:33 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/12/04 17:19:22 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/12/05 13:48:31 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void Camera::updateCam(GLFWwindow* win, float time) {
 }
 
 void Camera::movementControl() {
-	float moveSpeed = 0.005f;
+	float moveSpeed = 0.002f;
 	
 	if (_keys[GLFW_KEY_W].isDown) {
 		_currentDir.z -= moveSpeed;

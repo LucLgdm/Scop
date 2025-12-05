@@ -6,7 +6,7 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 09:36:08 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/12/04 11:04:56 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/12/05 13:43:49 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ class Application {
 		void run();
 		void cleanup();
 
+		void updateState();
+
 		Object *getObj() {return _obj;}
 		Renderer &getRenderer() {return _renderer;};
 		
@@ -41,6 +43,10 @@ class Application {
 		Object *_obj;
 		Renderer _renderer;
 		Camera _camera;
+		
+		std::map<int, KeyState> _keys;
+		int _state;		
+		int _indiceTex;
 		
 		void initGLFW();
 		void initOpenGL();

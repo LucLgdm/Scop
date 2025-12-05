@@ -6,7 +6,7 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/04 09:19:34 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/12/04 17:14:42 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/12/05 11:49:06 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ class Camera {
 
 		Vect3 _currentPos;
 		Vect3 _currentDir;
-		Vect3 _currentRot;
 
 		std::map<int, KeyState> _keys;
 };
