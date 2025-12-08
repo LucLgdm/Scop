@@ -6,7 +6,7 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/04 09:19:34 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/12/05 11:49:06 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/12/08 14:59:53 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,12 @@ class Camera {
 		
 		Camera &operator=(const Camera &other);
 
-		void updateCam(GLFWwindow*, float);
+		void updateCam(GLFWwindow*);
 		void updateKeyStates(GLFWwindow*);
 		void movementControl();
 
+		float radians(float deg) { return deg * (M_PI / 180.0f); };
+		
 		Mat4 getViewMatrix() const { return _viewMatrix; };
 		Mat4 getProjMatrix() const { return _projMatrix; };
 
@@ -41,7 +43,12 @@ class Camera {
 		Mat4 _projMatrix;
 
 		Vect3 _currentPos;
-		Vect3 _currentDir;
+		Vect3 _orientation;
 
+		float _yaw;
+		float _pitch;
+		float _moveSpeed;
+		float _turnSpeed;
+		
 		std::map<int, KeyState> _keys;
 };

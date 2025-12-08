@@ -1,6 +1,6 @@
 # www.cadnav.com
 
-mtllib 42.mtl
+# mtllib 42.mtl
 
 v -0.878478 3.182462 4.680330
 v -0.884344 3.268636 4.542160
@@ -18745,7 +18745,7 @@ vn 0.496135 0.715523 0.491809
 vn 0.362122 0.792041 0.491466
 
 g Creature_Triceratops_triceratops.m2_Geoset_000
-usemtl Creature_Triceratops_triceratops.m2_Geoset_000
+# usemtl Creature_Triceratops_triceratops.m2_Geoset_000
 s 1
 f 1/1/1 2/2/2 3/3/3
 f 4/4/4 5/5/5 6/6/6

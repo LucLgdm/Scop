@@ -6,7 +6,7 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/04 09:19:33 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/12/05 13:48:31 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/12/08 14:59:49 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,11 @@
 	// Constructeur
 Camera::Camera() {
 	_projMatrix = Mat4::perspective(45.0f, (float)WIDTH/(float)HEIGHT, 0.1f, 10.0f);
+	
+	_yaw = -90.0f;
+	_pitch = 0.0f;
+	_moveSpeed = 0.002f;
+	_turnSpeed = 0.2f;
 	
 		// movement keys
 	_keys[GLFW_KEY_W] = KeyState(); // front
@@ -35,7 +40,7 @@ Camera::Camera() {
 	_keys[GLFW_KEY_O] = KeyState(); // z clock
 	
 	_currentPos = Vect3(0.0f, 0.0f, 2.0f);
-	_currentDir = Vect3(0.0f, 0.0f, 0.0f);
+	_orientation = Vect3(0.0f, 0.0f, 0.0f);
 	
 	
 }
@@ -54,43 +59,40 @@ Camera &Camera::operator=(const Camera &other) {
 	return *this;
 }
 
-void Camera::updateCam(GLFWwindow* win, float time) { 
-		// Update key states
+void Camera::updateCam(GLFWwindow* win) {
+	Vect3 forward = normalize(_orientation);               // direction où regarde la caméra
+	Vect3 right = normalize(cross(forward, Vect3(0,1,0))); // axe local droite
+	Vect3 up = normalize(cross(right, forward)); 
+	
+	// Update key states
 	for(auto &keyPair : _keys) {
 		keyPair.second.update(glfwGetKey(win, keyPair.first) == GLFW_PRESS);
 	}
-	
-	movementControl();		
-	
-	_viewMatrix = Mat4::lookAt(_currentPos, _currentDir, Vect3(0.0f, 1.0f, 0.0f));
-}
 
-void Camera::movementControl() {
-	float moveSpeed = 0.002f;
-	
-	if (_keys[GLFW_KEY_W].isDown) {
-		_currentDir.z -= moveSpeed;
-		_currentPos.z -= moveSpeed;
-	}
-	if (_keys[GLFW_KEY_S].isDown) {
-		_currentDir.z += moveSpeed;
-		_currentPos.z += moveSpeed;
-	}
-	if (_keys[GLFW_KEY_A].isDown) {
-		_currentDir.x -= moveSpeed;
-		_currentPos.x -= moveSpeed;
-	}
-	if (_keys[GLFW_KEY_D].isDown) {
-		_currentDir.x += moveSpeed;
-		_currentPos.x += moveSpeed;
-	}
-	if (_keys[GLFW_KEY_Q].isDown) {
-		_currentDir.y += moveSpeed;
-		_currentPos.y += moveSpeed;
-	}
-	if (_keys[GLFW_KEY_E].isDown) {
-		_currentDir.y -= moveSpeed;
-		_currentPos.y -= moveSpeed;
-	}
-}
+	// Movement
+	if (_keys[GLFW_KEY_W].isDown) _currentPos = _currentPos + forward * _moveSpeed;
+	if (_keys[GLFW_KEY_S].isDown) _currentPos = _currentPos - forward * _moveSpeed;
+	if (_keys[GLFW_KEY_A].isDown) _currentPos = _currentPos - right * _moveSpeed;
+	if (_keys[GLFW_KEY_D].isDown) _currentPos = _currentPos + right * _moveSpeed;
+	if (_keys[GLFW_KEY_Q].isDown) _currentPos = _currentPos + up * _moveSpeed;
+	if (_keys[GLFW_KEY_E].isDown) _currentPos = _currentPos - up * _moveSpeed;
 
+	// Rotation
+	if (_keys[GLFW_KEY_LEFT].isDown) _yaw -= _turnSpeed;
+	if (_keys[GLFW_KEY_RIGHT].isDown) _yaw += _turnSpeed;
+	if (_keys[GLFW_KEY_UP].isDown) _pitch += _turnSpeed;
+	if (_keys[GLFW_KEY_DOWN].isDown) _pitch -= _turnSpeed;
+
+	// Clamp pitch pour éviter de retourner complètement la caméra
+	if (_pitch > 89.0f) _pitch = 89.0f;
+	if (_pitch < -89.0f) _pitch = -89.0f;
+
+	// Recalculer la direction
+	_orientation.x = cos(radians(_yaw)) * cos(radians(_pitch));
+	_orientation.y = sin(radians(_pitch));
+	_orientation.z = sin(radians(_yaw)) * cos(radians(_pitch));
+	_orientation = normalize(_orientation);
+
+	// Mise à jour de la matrice vue
+	_viewMatrix = Mat4::lookAt(_currentPos, _currentPos + _orientation, up);
+}

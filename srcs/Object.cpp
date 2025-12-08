@@ -6,7 +6,7 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/26 18:34:20 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/12/04 17:24:03 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/12/08 12:21:37 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -382,3 +382,9 @@ void Object::updateMatrix(GLFWwindow* win) {
 		_modelMatrix = _modelMatrix * Mat4::rotateY(angle);
 	}
 }
+
+// void Object::triangleToLine() {
+// 	for(auto &it : _faces) {
+		
+// 	}
+// }

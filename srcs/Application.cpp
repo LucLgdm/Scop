@@ -6,7 +6,7 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 11:44:45 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/12/05 14:03:12 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/12/08 14:47:21 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void Application::run() {
 			// Update matrix
 		_obj->updateMatrix(_window);
 			// Update camera
-		_camera.updateCam(_window, time);
+		_camera.updateCam(_window);
 			// Update state
 		updateState();
 			// Set uniforms
@@ -77,18 +77,19 @@ void Application::run() {
 
 		glBindVertexArray(_renderer.getVAO());
 
-		// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		
 		
 		switch (_state){
 			case 0 : // Triangle
+				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 				glDrawElements(GL_TRIANGLES, _obj->getIndiceBuild().size(), GL_UNSIGNED_INT, 0);
 				break;
 			case 1 : // Points
 				glDrawElements(GL_POINTS, _obj->getIndiceBuild().size(), GL_UNSIGNED_INT, 0);
 				break;
 			case 2 : // Lines
-				glDrawElements(GL_LINES, _obj->getIndiceBuild().size(), GL_UNSIGNED_INT, 0);	
+				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+				glDrawElements(GL_TRIANGLES, _obj->getIndiceBuild().size(), GL_UNSIGNED_INT, 0);	
 				break;
 		}
 		glfwSwapBuffers(_window);
@@ -149,8 +150,11 @@ void Application::initOpenGL() {
 	glViewport(0, 0, WIDTH, HEIGHT);
 	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_CULL_FACE);
+	// glEnable(GL_CULL_FACE);
+	// glDisable(GL_CULL_FACE);
+
 	glCullFace(GL_BACK);
+	glFrontFace(GL_CCW);
 }
 
 void Application::updateState() {
@@ -170,3 +174,4 @@ void Application::updateState() {
 	if (_keys[GLFW_KEY_ESCAPE].pressed())
 		glfwSetWindowShouldClose(_window, true);
 }
+
