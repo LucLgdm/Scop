@@ -6,7 +6,7 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 09:53:55 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/12/04 17:11:42 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/12/09 17:33:50 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ struct Vect3 {
 	Vect3 operator*(float s) const {
 		return Vect3(x * s, y * s, z * s);
 	}
+
+	const float* data() const { return &x; }
 };
 
 static Vect3 cross(const Vect3& a, const Vect3& b) {
@@ -120,4 +122,3 @@ struct KeyState {
         isDown = currentDown;
     }
 };
-

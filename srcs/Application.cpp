@@ -6,7 +6,7 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 11:44:45 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/12/08 14:47:21 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/12/09 18:15:15 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ Application::Application(): _state(0) {
 	_keys[GLFW_KEY_P] = KeyState();
 	_keys[GLFW_KEY_ESCAPE] = KeyState();
 	_indiceTex = 0;
+	_lightOn = false;
 }
 
 Application::~Application() {
@@ -50,9 +51,9 @@ void Application::run() {
 		
 		glClearColor(0.2f, 0.2f, 0.17f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		
+
 		glUseProgram(_renderer.getShaderProg());
-		
+	
 			// Bind texture
 		if (_obj->getTexturesPath().size() > 0)	{
 			glActiveTexture(GL_TEXTURE0);
@@ -60,24 +61,34 @@ void Application::run() {
 			GLint texLoc = glGetUniformLocation(_renderer.getShaderProg(), "uTexture");
 			glUniform1i(texLoc, 0);
 		}
+		
 			// Update matrix
 		_obj->updateMatrix(_window);
 			// Update camera
 		_camera.updateCam(_window);
 			// Update state
 		updateState();
+		
 			// Set uniforms
 		GLuint modelLoc = glGetUniformLocation(_renderer.getShaderProg(), "model");
 		GLuint viewLoc  = glGetUniformLocation(_renderer.getShaderProg(), "view");
 		GLuint projLoc  = glGetUniformLocation(_renderer.getShaderProg(), "projection");
-
+		
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, _obj->getMat().data());
 		glUniformMatrix4fv(viewLoc,  1, GL_FALSE, _camera.getViewMatrix().data());
 		glUniformMatrix4fv(projLoc,  1, GL_FALSE, _camera.getProjMatrix().data());
 
-		glBindVertexArray(_renderer.getVAO());
+		GLuint lightOnLoc = glGetUniformLocation(_renderer.getShaderProg(), "uLightOn");
+		glUniform1i(lightOnLoc, _lightOn ? 1 : 0);
 
+		if (_lightOn) {
+			GLuint lightPosLoc = glGetUniformLocation(_renderer.getShaderProg(), "lightPos");
+			GLuint lightIntensityLoc = glGetUniformLocation(_renderer.getShaderProg(), "lightIntensity");
+			glUniform3fv(lightPosLoc, 1, _renderer.getLight().position.data());
+			glUniform1f(lightIntensityLoc, _renderer.getLight().intensity);
+		}
 		
+		glBindVertexArray(_renderer.getVAO());
 		
 		switch (_state){
 			case 0 : // Triangle
@@ -173,5 +184,7 @@ void Application::updateState() {
 		_indiceTex = 0;
 	if (_keys[GLFW_KEY_ESCAPE].pressed())
 		glfwSetWindowShouldClose(_window, true);
+	if (_keys[GLFW_KEY_L].pressed())
+		_lightOn = !_lightOn;
 }
 

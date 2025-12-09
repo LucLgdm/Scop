@@ -6,7 +6,7 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/26 18:34:20 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/12/08 12:21:37 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/12/08 16:25:57 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -339,7 +339,7 @@ void Object::buildVertex() {
 						const Mtl mtl = _mtlMap[f[idx].mtlName];
 						if (!mtl.mapKd.empty())
 							v.hasTex = 1.0f;
-						else
+						else 
 							v.color = Vect3(mtl.kd.r, mtl.kd.g, mtl.kd.b);
 					} else
 						v.hasTex = 1.0f;

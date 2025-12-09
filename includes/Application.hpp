@@ -6,7 +6,7 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 09:36:08 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/12/05 15:37:45 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/12/09 18:06:37 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ class Application {
 		std::map<int, KeyState> _keys;
 		int _state;		
 		int _indiceTex;
+		bool _lightOn;
 		
 		void initGLFW();
 		void initOpenGL();

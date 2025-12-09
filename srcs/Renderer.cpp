@@ -6,7 +6,7 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 10:18:27 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/12/04 11:18:59 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/12/09 17:49:53 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,9 @@ Renderer::Renderer() {
 	_vao = 0;
 	_ebo = 0;
 	_shaderProgram = 0;
+	_light.position = Vect3(5.0f, 5.0f, 5.0f);
+	_light.color = Vect3(1.0f, 1.0f, 1.0f);
+	_light.intensity = 1.0f;
 }
 
 Renderer::~Renderer() {}

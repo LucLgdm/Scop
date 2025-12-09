@@ -9,14 +9,20 @@ layout(location = 4) in float aHasTex;
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
+uniform vec3 lightPos;
 
 out vec2 TexCoord;
 out vec3 Color;
 flat out float HasTex;
+out vec3 Normal;
+out vec3 FragPos;
 
 void main() {
-    gl_Position = projection * view * model * vec4(aPos, 1.0);
-    TexCoord = aTex;
+	
+	gl_Position = projection * view * model * vec4(aPos, 1.0);
+	FragPos = vec3(model * vec4(aPos, 1.0));
+	Normal = normalize(mat3(transpose(inverse(model))) * aNormal);
+	TexCoord = aTex;
 	Color = aColor;
 	HasTex = aHasTex;
 }

@@ -20,7 +20,7 @@ vn 1  0  0    # Droite
 vn 0  1  0    # Haut
 vn 0 -1  0    # Bas
 
-# Faces (triangulées pour être clean)
+# Faces
 usemtl Material2
 f 1//6 2//6 4//6
 f 2//6 3//6 4//6

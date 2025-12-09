@@ -6,7 +6,7 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/26 18:34:11 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/12/05 15:38:39 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/12/08 16:22:03 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,6 @@ class Object {
 
 		void setTexturesPath(int, char **);
 		
-		void triangleToLine();
-
 		void updateMatrix(GLFWwindow*);
 
 		void display();

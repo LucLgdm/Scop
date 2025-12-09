@@ -6,7 +6,7 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/04 09:19:33 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/12/08 14:59:49 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/12/08 15:05:12 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,22 +22,6 @@ Camera::Camera() {
 	_pitch = 0.0f;
 	_moveSpeed = 0.002f;
 	_turnSpeed = 0.2f;
-	
-		// movement keys
-	_keys[GLFW_KEY_W] = KeyState(); // front
-	_keys[GLFW_KEY_S] = KeyState(); // back
-	_keys[GLFW_KEY_A] = KeyState(); // left
-	_keys[GLFW_KEY_D] = KeyState(); // right
-	_keys[GLFW_KEY_Q] = KeyState(); // up
-	_keys[GLFW_KEY_E] = KeyState(); // down
-	
-		// axes keys
-	_keys[GLFW_KEY_I] = KeyState(); // x anticlock
-	_keys[GLFW_KEY_K] = KeyState(); // x clock
-	_keys[GLFW_KEY_L] = KeyState(); // y anticlock
-	_keys[GLFW_KEY_J] = KeyState(); // y clock
-	_keys[GLFW_KEY_U] = KeyState(); // z anticlock
-	_keys[GLFW_KEY_O] = KeyState(); // z clock
 	
 	_currentPos = Vect3(0.0f, 0.0f, 2.0f);
 	_orientation = Vect3(0.0f, 0.0f, 0.0f);

@@ -6,7 +6,7 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 10:18:20 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/12/04 17:16:51 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/12/09 17:26:40 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,12 @@
 #include <string>
 
 #include "Object.hpp"
+
+struct Light {
+	Vect3 position;
+	Vect3 color;
+	float intensity;	
+};
 
 class Renderer {
 	public:
@@ -36,6 +42,9 @@ class Renderer {
 		GLuint getVAO() const {return _vao;};
 		GLuint getTexGPU(int i) const {return _texturesGPU[i];};
 
+		void setLight(const Light& light) { _light = light; };
+    	const Light& getLight() const { return _light; };
+
 		void display();
 		void cleanup();
 		
@@ -46,4 +55,5 @@ class Renderer {
 		GLuint _shaderProgram;
 
 		std::vector<GLuint> _texturesGPU;
+		Light _light;
 };
