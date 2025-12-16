@@ -6,7 +6,7 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/04 09:19:33 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/12/08 15:05:12 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/12/16 19:10:14 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,6 @@ Camera::Camera() {
 	
 	_currentPos = Vect3(0.0f, 0.0f, 2.0f);
 	_orientation = Vect3(0.0f, 0.0f, 0.0f);
-	
-	
 }
 
 Camera::~Camera() {}
@@ -76,6 +74,13 @@ void Camera::updateCam(GLFWwindow* win) {
 	_orientation.y = sin(radians(_pitch));
 	_orientation.z = sin(radians(_yaw)) * cos(radians(_pitch));
 	_orientation = normalize(_orientation);
+
+	if (_keys[GLFW_KEY_SPACE].wasDown) {
+		_currentPos = Vect3(0.0f, 0.0f, 2.0f);
+		_orientation = Vect3(0.0f, 0.0f, 0.0f);
+		_yaw   = -90.0f;
+		_pitch = 0.0f;
+	}
 
 	// Mise à jour de la matrice vue
 	_viewMatrix = Mat4::lookAt(_currentPos, _currentPos + _orientation, up);

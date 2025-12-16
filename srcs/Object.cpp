@@ -6,7 +6,7 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/26 18:34:20 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/12/08 16:25:57 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/12/16 19:20:19 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,9 @@ Object::Object() {
 						std::numeric_limits<float>::lowest(),
 						std::numeric_limits<float>::lowest());
 	_m = KeyState();
+	_x = KeyState();
+	_y = KeyState();
+	_z = KeyState();
 }
 
 Object::~Object() {}
@@ -373,18 +376,24 @@ void Object::centerAndScaleToUnit() {
 
 void Object::updateMatrix(GLFWwindow* win) {
 	_m.update(glfwGetKey(win, GLFW_KEY_M) == GLFW_PRESS);
-	if (_m.pressed()) {
-		_stopMove = !_stopMove;
-	}
+	_x.update(glfwGetKey(win, GLFW_KEY_X) == GLFW_PRESS);
+	_y.update(glfwGetKey(win, GLFW_KEY_Y) == GLFW_PRESS);
+	_z.update(glfwGetKey(win, GLFW_KEY_Z) == GLFW_PRESS);
 	
+	if (_m.pressed())
+		_stopMove = !_stopMove;
+		
 	if (!_stopMove) {
 		float angle = 1.0f/360.0f; // rotation speed
 		_modelMatrix = _modelMatrix * Mat4::rotateY(angle);
 	}
-}
 
-// void Object::triangleToLine() {
-// 	for(auto &it : _faces) {
-		
-// 	}
-// }
+	float degToRad = 3.14159265f / 180.0f;
+
+	if (_x.pressed())
+		_modelMatrix = _modelMatrix * Mat4::rotateX(90.0f * degToRad);
+	if (_y.pressed())
+		_modelMatrix = _modelMatrix * Mat4::rotateY(90.0f * degToRad);
+	if (_z.pressed())
+		_modelMatrix = _modelMatrix * Mat4::rotateZ(90.0f * degToRad);
+}

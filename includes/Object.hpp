@@ -6,7 +6,7 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/26 18:34:11 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/12/08 16:22:03 by lde-merc         ###   ########.fr       */
+/*   Updated: 2025/12/16 19:15:07 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,5 +87,8 @@ class Object {
 		std::vector<unsigned int> _indiceLine;
 		Mat4 _modelMatrix;
 		KeyState _m;
+		KeyState _x;
+		KeyState _y;
+		KeyState _z;
 		bool _stopMove = false;
 };
