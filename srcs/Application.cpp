@@ -6,7 +6,7 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 11:44:45 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/12/09 18:15:15 by lde-merc         ###   ########.fr       */
+/*   Updated: 2026/01/07 14:15:49 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void Application::run() {
 	while (!glfwWindowShouldClose(_window)) {
 		float time = glfwGetTime() / 2;
 		
-		glClearColor(0.2f, 0.2f, 0.17f, 1.0f);
+		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		glUseProgram(_renderer.getShaderProg());

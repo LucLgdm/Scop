@@ -6,7 +6,7 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/26 18:34:20 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/12/16 19:20:19 by lde-merc         ###   ########.fr       */
+/*   Updated: 2026/01/07 14:15:21 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -384,7 +384,7 @@ void Object::updateMatrix(GLFWwindow* win) {
 		_stopMove = !_stopMove;
 		
 	if (!_stopMove) {
-		float angle = 1.0f/360.0f; // rotation speed
+		float angle = 1.0f/500.0f; // rotation speed
 		_modelMatrix = _modelMatrix * Mat4::rotateY(angle);
 	}
 

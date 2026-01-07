@@ -6,7 +6,7 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/04 09:19:33 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/12/16 19:10:14 by lde-merc         ###   ########.fr       */
+/*   Updated: 2026/01/07 14:14:32 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@ Camera::Camera() {
 	
 	_yaw = -90.0f;
 	_pitch = 0.0f;
-	_moveSpeed = 0.002f;
-	_turnSpeed = 0.2f;
+	_moveSpeed = 0.001f;
+	_turnSpeed = 0.1f;
 	
 	_currentPos = Vect3(0.0f, 0.0f, 2.0f);
 	_orientation = Vect3(0.0f, 0.0f, 0.0f);

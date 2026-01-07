@@ -6,7 +6,7 @@
 /*   By: lde-merc <lde-merc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/26 18:34:11 by lde-merc          #+#    #+#             */
-/*   Updated: 2025/12/16 19:15:07 by lde-merc         ###   ########.fr       */
+/*   Updated: 2026/01/07 14:06:39 by lde-merc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,5 +90,5 @@ class Object {
 		KeyState _x;
 		KeyState _y;
 		KeyState _z;
-		bool _stopMove = false;
+		bool _stopMove = true;
 };
